@@ -1,9 +1,10 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as React from "react";
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "../components/Button";
-import { validateEmail } from "../utils";
+import { validateEmail } from "./utils";
 
-const onboarding = () => {
+export default function onboarding ()  {
   const [email, setEmail] = React.useState('');
   const [name, setname] = React.useState('');
 
@@ -93,4 +94,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default onboarding;
+
