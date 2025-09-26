@@ -1,102 +1,23 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as ImagePicker from "expo-image-picker";
-import TextInputMask from 'expo-text-input-mask';
-import { useEffect, useState } from 'react';
+
 import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
-import Header from '../components/Header';
+import { MaskedTextInput } from "react-native-mask-text";
+import { useProfileViewModel } from "../ViewModel/ProfileViewModel";
+import Header from './View/component/Header';
 
 
 
 export default function ProfileScreen({navigation}) {
-  const [firstName, setFirstName] = useState();
-  const [lastName, setLastName] = useState();
-  const [email, setEmail] = useState();
-  const [phone, setPhone] = useState();
-  const iniciales = `${firstName[0]}${lastName[0]}`;
 
-  const [imagenUri, setImagenUri] = useState(null);
-
-  const [notifications, setNotifications] = useState({
-    orderStatuses: true,
-    passwordChanges: true,
-    specialOffers: true,
-    newsletter: true,
-  });
-
-    useEffect(() => {
-    const cargarDatos = async () => {
-      try {
-        const nombreGuardado = await AsyncStorage.getItem('usuario_nombre');
-        const correoGuardado = await AsyncStorage.getItem('usuario_correo');
-      if (nombreGuardado) setFirstName(nombreGuardado);
-      if (correoGuardado) setEmail(correoGuardado);
-
-      } catch (e) {
-        console.error('Error al cargar los datos', e);
-      }
-    };
-
-    cargarDatos();
-  }, []);
-
-  const handleToggle = (key) => {
-    setNotifications({ ...notifications, [key]: !notifications[key] });
-  };
-
-  const handleSave =()=> {
-    useEffect(() =>{
-      (async() =>{
-    try {
-      const perfil = {
-        firstName,
-        lastName,
-        email,
-        phone,
-        imagenUri,
-        notifications,
-      };
-      await AsyncStorage.setItem(`perfil-${email}`,JSON.stringify(perfil));
-      console.log("Data saved successfully");
-    } catch (error) {
-      console.error("Error saving profile:", error);
-    }})})
-  };
-  
-
-  const handleDiscard = () => {
-      useEffect(() =>{
-      (async() =>{
-    try {
-
-      await AsyncStorage.removeItem(`perfil-${email}`);
-     } catch (error) {
-      console.error('Error deleting data:',error);
-      Alert.alert('Error', 'Data could not be deleted');
-    }
-  })})
-  };    
-
-  const seleccionarImagen = async () => {
-    // Pedir permisos
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-    if (status !== "granted") {
-      alert("Se requieren permisos para acceder a las imágenes.");
-      return;
-    }
-
-    // Abrir selector
-    const resultado = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
-      allowsEditing: true,
-      aspect: [1, 1],
-      quality: 0.8,
-    });
-
-    if (!resultado.canceled) {
-      setImagenUri(resultado.assets[0].uri);
-    }
-  };
-  
+ const {
+    firstName, setFirstName,
+    lastName, setLastName,
+    email, setEmail,
+    phone, setPhone,
+    imagenUri, iniciales,
+    notifications, handleToggle,
+    handleSave, handleDiscard,
+    seleccionarImagen,
+  } = useProfileViewModel();  
   return (
     <View style={styles.container}>
       <Header/>
@@ -130,12 +51,12 @@ export default function ProfileScreen({navigation}) {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-       <TextInputMask
-        mask="([000]) [000]-[0000]"
+       <MaskedTextInput
+        mask="(999) 999-9999"
         placeholder="(123) 456-7890"
         style={styles.input}
         value={phone}
-        onChangeText={setPhone}
+        onChangeText={(text, rawText) => setPhone(rawText)}
         keyboardType="phone-pad"
       />
 

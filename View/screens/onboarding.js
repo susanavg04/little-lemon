@@ -1,24 +1,22 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as React from "react";
+
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import Button from "../components/Button";
-import { validateEmail } from "./utils";
+import Button from "./View/components/Button";
+
 
 export default function onboarding ()  {
-  const [email, setEmail] = React.useState('');
-  const [name, setname] = React.useState('');
+  const {
+    email,
+    firstname,
+    password,
+    setEmail,
+    setfirstname,
+    setPassword,
+    isEmailValid,
+    isPasswordValid,
+    guardarDatos,
+  } = useOnboardingViewModel();
 
-  const isEmailValid = validateEmail(email);
 
-  const guardarDatos = async () => {
-    try {
-      await AsyncStorage.setItem('usuario_nombre', name);
-      await AsyncStorage.setItem('usuario_correo', email);
-      
-    } catch (e) {
-      console.error('Error al guardar los datos', e);
-    };
-  };
   return (
     <View style={styles.container}>
       <View style= {styles.section1}>
@@ -41,20 +39,33 @@ export default function onboarding ()  {
       />
       <TextInput
         style={styles.input}
-        value={name}
-        onChangeText={setname}
+        value={firstname}
+        onChangeText={setfirstname}
         keyboardType="default"
         textContentType="name"
         placeholder={"First Name"}
       />
+        <TextInput
+          style={styles.input}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+          textContentType="password"
+          placeholder="Enter your password"
+        />
+
+        {!isPasswordValid && password.length > 0 && (
+          <Text style={{ color: "red", fontSize: 14 }}>
+            Password must have at least 8 characters, 
+            1 uppercase, 1 lowercase, 1 number and 1 special character.
+          </Text>
+        )}
       </View>
       <View style= {styles.section3}>
       <Button
         onPress={guardarDatos}
         disabled={!isEmailValid}
-      >
-        Next
-      </Button>
+      >Next</Button>
     </View>
     </View>
   );

@@ -2,13 +2,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import home from './screens/home';
-import onboarding from './screens/onboarding';
-import profile from './screens/profile';
-import splashscreen from './screens/splashscreen';
+import home from './View/screens/home';
+import onboarding from './View/screens/onboarding';
+import profile from './View/screens/profile';
+import splashscreen from './View/screens/splashscreen';
 
 
 const Stack = createNativeStackNavigator();
+
 
 function App() {
     const [state, setState] = useState({

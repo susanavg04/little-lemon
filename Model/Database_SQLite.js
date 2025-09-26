@@ -1,6 +1,8 @@
 import * as SQLite from 'expo-sqlite';
-
+const API_URL =
+  'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu-items-by-category.json';
 const db = SQLite.openDatabase('little_lemon');
+
 
 export async function createTable() {
   return new Promise((resolve, reject) => {
@@ -67,4 +69,23 @@ export async function filterByQueryAndCategories(query, activeCategories) {
       }, reject);
     }
   });
+}
+
+export async function fetchMenu() {
+  await createTable();
+        // 2. Check if data was already stored
+   let menuItems = await getMenuItems();
+
+   if (!menuItems.length) {
+          // Fetching menu from URL
+     const response = await fetch(API_URL);
+     const json = await response.json();
+     menuItems = json.menu.map((item) => ({
+     ...item,
+     category: item.category.title,
+   }));
+          // Storing into database
+    await saveMenuItems(menuItems);
+  }
+  return menuItems;
 }
