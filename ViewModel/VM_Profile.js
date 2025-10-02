@@ -21,8 +21,8 @@ export const useProfileViewModel = () => {
    useEffect(() => {
      const cargarDatos = async () => {
        try {
-         const nombreGuardado = await AsyncStorage.getItem(`nombre-${email}`);
-         const correoGuardado = await AsyncStorage.getItem(`email-${email}`);
+         const nombreGuardado = await AsyncStorage.getItem(`nombre_${email}`);
+         const correoGuardado = await AsyncStorage.getItem(`email_${email}`);
        if (nombreGuardado) setfirstname(nombreGuardado);
        if (correoGuardado) setEmail(correoGuardado);
  

@@ -1,19 +1,24 @@
 
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./View/components/Button";
+import { useOnboardingViewModel } from "./ViewModel/useOnboardingViewModel";
 
 
 export default function onboarding ()  {
+
   const {
-    email,
     firstname,
+    email,
     password,
-    setEmail,
+    mensaje,
     setfirstname,
+    setEmail,
     setPassword,
+    registrar,
+    login,
     isEmailValid,
     isPasswordValid,
-    guardarDatos,
+
   } = useOnboardingViewModel();
 
 
@@ -29,6 +34,8 @@ export default function onboarding ()  {
       <Text style={styles.title}>
         Let us get to know you
       </Text>
+
+      <Text>Email</Text>
       <TextInput
         style={styles.input}
         value={email}
@@ -37,6 +44,7 @@ export default function onboarding ()  {
         textContentType="emailAddress"
         placeholder={"Type your email"}
       />
+      <Text>Name</Text>
       <TextInput
         style={styles.input}
         value={firstname}
@@ -45,6 +53,7 @@ export default function onboarding ()  {
         textContentType="name"
         placeholder={"First Name"}
       />
+      <Text>Password</Text>
         <TextInput
           style={styles.input}
           value={password}
@@ -54,6 +63,7 @@ export default function onboarding ()  {
           placeholder="Enter your password"
         />
 
+
         {!isPasswordValid && password.length > 0 && (
           <Text style={{ color: "red", fontSize: 14 }}>
             Password must have at least 8 characters, 
@@ -62,10 +72,10 @@ export default function onboarding ()  {
         )}
       </View>
       <View style= {styles.section3}>
-      <Button
-        onPress={guardarDatos}
-        disabled={!isEmailValid}
-      >Next</Button>
+      <Button title="Registrar" onPress={registrar} />
+      <Button title="Login" onPress={login} />
+
+      {mensaje ? <Text style={{ marginTop: 20 }}>{mensaje}</Text> : null}
     </View>
     </View>
   );

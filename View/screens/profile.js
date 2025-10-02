@@ -84,7 +84,7 @@ export default function ProfileScreen({navigation}) {
         <TouchableOpacity style={styles.discardButton} onPress={handleDiscard}>
           <Text style={styles.discardText}>Discard changes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
+        <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
           <Text style={styles.saveText}>Save changes</Text>
         </TouchableOpacity>
       </View>
