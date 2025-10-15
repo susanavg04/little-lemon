@@ -16,7 +16,7 @@ export async function createTable() {
       resolve
     );
   });
-}
+};
 
 export async function getMenuItems() {
   return new Promise((resolve) => {
@@ -26,7 +26,7 @@ export async function getMenuItems() {
       });
     });
   });
-}
+};
 
 export function saveMenuItems(menuItems) {
   db.transaction((tx) => {
@@ -39,7 +39,7 @@ export function saveMenuItems(menuItems) {
         .join(', ')}`
     );
   });
-}
+};
 
 export async function filterByQueryAndCategories(query, activeCategories) {
   return new Promise((resolve, reject) => {
@@ -69,7 +69,7 @@ export async function filterByQueryAndCategories(query, activeCategories) {
       }, reject);
     }
   });
-}
+};
 
 export async function fetchMenu() {
   await createTable();
@@ -88,4 +88,19 @@ export async function fetchMenu() {
     await saveMenuItems(menuItems);
   }
   return menuItems;
-}
+};
+
+export async function getDishById(id) {
+  return new Promise((resolve, reject) => {
+    db.transaction((tx) => {
+      tx.executeSql(
+        'SELECT * FROM menuitems WHERE id = ?',
+        [id],
+        (_, { rows }) => {
+          resolve(rows._array[0]); // un solo plato
+        },
+        reject
+      );
+    });
+  });
+};

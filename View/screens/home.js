@@ -1,4 +1,5 @@
 import {
+  Pressable,
   SafeAreaView,
   SectionList,
   StatusBar,
@@ -81,7 +82,9 @@ export default function home() {
         sections={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <Item title={item.title} price={item.price} />
+            <Pressable onPress={() => navigation.navigate("DishDetail", { dishId: item.id })}>
+            <Item title={item.title} price={item.price} />
+            </Pressable>
         )}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>

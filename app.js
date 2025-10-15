@@ -2,6 +2,8 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import Cartscreen from "./View/screens/Cartscreen";
+import Dishdetailscreen from "./View/screens/Dishdetailscreen";
 import home from './View/screens/home';
 import onboarding from './View/screens/onboarding';
 import profile from './View/screens/profile';
@@ -43,7 +45,11 @@ function App() {
       ):(
       <>
      {state.isOnboardingCompleted ? (
+      <>
       <Stack.Screen name="Home" component={home} /> 
+      <Stack.Screen name="DishDetail" component={Dishdetailscreen} />
+      <Stack.Screen name="Cart" component={Cartscreen} />
+      </>
       ):(
       <>
      <Stack.Screen name="Profile" component={profile} />
