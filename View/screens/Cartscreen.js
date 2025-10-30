@@ -5,9 +5,15 @@ import { getCartTotals, removeItemFromCart } from "../Model/Cartservice";
 export default function Cartscreen() {
   const [cartData, setCartData] = useState({ cart: [], subtotal: 0, delivery: 0, service: 0, total: 0 });
 
+
   const loadCart = async () => {
+    try {
     const data = await getCartTotals();
     setCartData(data);
+
+    } catch{
+      console.error("Error loading cart:", error);
+    }
   };
 
   useEffect(() => {
@@ -18,24 +24,28 @@ export default function Cartscreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Your Order</Text>
 
-      <FlatList
-        data={cartData.cart}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => (
-          <View style={styles.item}>
-            <Text>{item.quantity} x {item.title}</Text>
-            <Text>${(item.price * item.quantity).toFixed(2)}</Text>
-            <TouchableOpacity onPress={async () => { await removeItemFromCart(item.id); loadCart(); }}>
-              <Text style={{ color: "red" }}>Remove</Text>
-            </TouchableOpacity>
-          </View>
+         <FlatList
+           data={cartData.cart}
+           keyExtractor={(item) => item.id.toString()}
+           renderItem={({ item }) => (
+             <View style={styles.item}>
+               <Text>{item.quantity} x {item.title}</Text>
+               <Text>${(item.price * item.quantity).toFixed(2)}</Text>
+               <TouchableOpacity onPress={async () => { await removeItemFromCart(item.id); await loadCart(); }}>
+                   <Text style={{ color: "red" }}>Remove</Text>
+                 </TouchableOpacity>
+               </View>  
         )}
-      />
+
+    />
+         
+       
+
 
       <View style={styles.summary}>
-        <Text>Subtotal: ${cartData.subtotal.toFixed(2)}</Text>
         <Text>Delivery: ${cartData.delivery.toFixed(2)}</Text>
         <Text>Service: ${cartData.service.toFixed(2)}</Text>
+        <Text>Subtotal: ${cartData?.subtotal?.toFixed(2) ?? "0.00"}</Text>
         <Text style={styles.total}>TOTAL: ${cartData.total.toFixed(2)}</Text>
       </View>
 

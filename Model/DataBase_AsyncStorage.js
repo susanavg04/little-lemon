@@ -1,19 +1,10 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import {
-  email,
-  firstname,
-  imagenUri,
-  lastName,
-  notifications,
-  phone
-} from './ViewModel/VM_Profile';
+
 
   export const guardarUsuario = async (user) => {
     try {
-      await AsyncStorage.setItem(`nombre_${user.email}`, JSON.stringify(user.firstname));
-      await AsyncStorage.setItem(`email_${user.email}`, JSON.stringify(user.email));
-      await AsyncStorage.setItem(`password_${user.email}`, JSON.stringify(user.password));
+      await AsyncStorage.setItem(`user_${user.email}`, JSON.stringify(user));
       return true;
     } catch (e)  {
       console.error('Error al guardar los datos', e);
@@ -25,10 +16,12 @@ import {
   // Cargar usuario por email
 export const cargarUsuario = async (email) => {
   try {
-    const nombre = await AsyncStorage.getItem(`nombre_${email}`);
-    const correo = await AsyncStorage.getItem(`email_${email}`);
-    const password = await AsyncStorage.getItem(`password_${email}`);
-
+    const data = await AsyncStorage.getItem(`user_${email}`);
+    if (!data) return null; // si no existe
+    const user = JSON.parse(data);
+    nombre = user.firstName;
+    correo = user.email;
+    password = user.password;
     if (nombre && correo && password) {
       return { firstname: nombre, email: correo, password };
     }
@@ -55,27 +48,21 @@ export const loginUsuario = async (email, password) => {
   }
 };
 
- export const saveProfile = async ()=> {
+ export const saveProfile = async (email, perfil)=> {
      
       try {
-        const perfil = {
-          firstname,
-          lastName,
-          email,
-          phone,
-          imagenUri,
-          notifications,
-        };
+        if (!email) throw new Error("No se puede guardar perfil sin email");
         await AsyncStorage.setItem(`perfil-${email}`,JSON.stringify(perfil));
         console.log("Data saved successfully");
       } catch (error) {
         console.error("Error saving profile:", error);
       }}
     
-  export const deleteProfile =  async() => {
+  export const deleteProfile =  async(email) => {
        
         try {
-    
+
+          if (!email) throw new Error("No se puede eliminar perfil sin email");
           await AsyncStorage.removeItem(`perfil-${email}`);
          } catch (error) {
           console.error('Error deleting data:',error);

@@ -1,15 +1,14 @@
 
-import { Image, Pressable, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from "react-native-mask-text";
-import { useProfileViewModel } from "../ViewModel/ProfileViewModel";
-import Header from './View/component/Header';
-
+import { useProfileViewModel } from "../ViewModel/VM_Profile";
+import Header from '../component/Header';
 
 
 export default function ProfileScreen({navigation}) {
 
  const {
-    firstName, setFirstName,
+    firstName, setfirstName,
     lastName, setLastName,
     email, setEmail,
     phone, setPhone,
@@ -19,6 +18,7 @@ export default function ProfileScreen({navigation}) {
     seleccionarImagen,
   } = useProfileViewModel();  
   return (
+    <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
       <Header/>
       <TouchableOpacity onPress={seleccionarImagen}>
@@ -31,12 +31,12 @@ export default function ProfileScreen({navigation}) {
         )}
       </TouchableOpacity>
       <Text style={styles.title}>{`${firstName} ${lastName}`}</Text>
-      <Text style={styles.title}>Personal information</Text>
+      <Text style={styles.sectionTitle}>Personal information</Text>
       <TextInput
         style={styles.input}
         placeholder="First name"
         value={firstName}
-        onChangeText={setFirstName}
+        onChangeText={setfirstName}
       />
       <TextInput
         style={styles.input}
@@ -84,12 +84,12 @@ export default function ProfileScreen({navigation}) {
         <TouchableOpacity style={styles.discardButton} onPress={handleDiscard}>
           <Text style={styles.discardText}>Discard changes</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.saveButton} onPress={saveProfile}>
+        <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveText}>Save changes</Text>
         </TouchableOpacity>
       </View>
     </View>
-    
+    </ScrollView>
   );
 }
 const styles = StyleSheet.create({
@@ -168,7 +168,7 @@ const styles = StyleSheet.create({
     color: '#49SE57',
   },
   saveButton: {
-    backgroundColor: '#49SE57',
+    backgroundColor: '#49CE57',
     padding: 12,
     borderRadius: 6,
     flex: 0.45,

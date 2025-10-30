@@ -16,6 +16,7 @@ export async function getCart() {
 // 🔹 Guardar carrito
 async function saveCart(cart) {
   try {
+    if (!Array.isArray(cart)) throw new Error("Invalid cart format");
     await AsyncStorage.setItem(CART_KEY, JSON.stringify(cart));
   } catch (e) {
     console.error("Error al guardar carrito", e);
@@ -24,6 +25,11 @@ async function saveCart(cart) {
 
 // 🔹 Agregar ítem
 export async function addItemToCart(item) {
+
+  if (!item || !item.id || !item.price || !item.quantity) {
+    console.warn("Item inválido:", item);
+    return;
+  }
   let cart = await getCart();
 
   // si ya existe el producto, aumenta cantidad
@@ -63,5 +69,14 @@ export async function getCartTotals() {
   const service = 1.0; // fijo
   const total = subtotal + delivery + service;
 
-  return { subtotal, delivery, service, total, cart };
+  return { 
+    subtotal: parseFloat(subtotal.toFixed(2)), 
+    delivery, 
+    service,
+    total: parseFloat(total.toFixed(2)),
+    cart 
+  };
+
 };
+
+

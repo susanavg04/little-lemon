@@ -1,10 +1,10 @@
 
-import { Image, ScrollView, StyleSheet, Text, TouchableOpacity } from "react-native";
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import OptionSelector from "../components/Optionselector";
 import QuantitySelector from "../components/Quantityselector";
-import { useDishdetailViewModel } from "../ViewModel/useDishdetailViewModel";
+import { useDishDetailViewModel } from "../ViewModel/useDishDetailViewModel";
 
-export default function DishDetailScreen({ route }) {
+export default function DishDetailScreen({ route, navigation }) {
   const { dishId } = route.params; // viene del menu
   const {
     dish,
@@ -14,13 +14,21 @@ export default function DishDetailScreen({ route }) {
     increaseQuantity,
     decreaseQuantity,
     addToCart
-  } = useDishdetailViewModel(dishId);
+  } = useDishDetailViewModel(dishId);
+
+  const dishImages = {
+  "Bruschetta": require("./assets/images/Bruschetta.png"),
+  "Greek salad": require("./assets/images/Greek salad.png"),
+  "Pasta": require("../assets/images/Pasta.png"),
+  "Grilled fish": require("./assets/images/Grilled fish.png"),
+  "Lemon dessert": require("../assets/images/Lemon dessert.png"),
+};
 
   if (!dish) return <Text>Cargando...</Text>;
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Image source={require(`../assets/${dish.title }.png`)} style={styles.image} />
+      <Image source={dishImages[dish.title]} style={styles.image} />
       <Text style={styles.title}>{dish.title}</Text>
       <Text style={styles.description}>{dish.price}</Text>
       <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 8 }}>
@@ -29,7 +37,7 @@ export default function DishDetailScreen({ route }) {
          style={{ width: 24, height: 24, marginRight: 8 }}
          resizeMode="contain"
          />
-       <Text style={{ fontSize: 14, color: "#333" }}>
+       <Text style={ styles.delivery }>
          Delivery time: 20 minutes
        </Text>
       </View>
@@ -48,7 +56,10 @@ export default function DishDetailScreen({ route }) {
         onIncrease={increaseQuantity}
         onDecrease={decreaseQuantity}
       />
-      <TouchableOpacity onPress={() => navigation.navigate("Cart")} style={styles.viewCart}>
+      <TouchableOpacity 
+        onPress={() => {
+        addToCart();
+        navigation.navigate("Cart")}} style={styles.viewCart}>
         <Text style={{ color: "blue" }}>View Cart</Text>
       </TouchableOpacity>
 

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { addItemToCart } from "../Model/Cartservices";
-import { getDishById } from "../model/Database_SQLite";
+import { getDishById } from "../Model/Database_SQLite";
 
 export function useDishDetailViewModel(dishId) {
   const [dish, setDish] = useState(null);
@@ -14,7 +14,8 @@ export function useDishDetailViewModel(dishId) {
   useEffect(() => {
     const fetchDish = async () => {
       const data = await getDishById(dishId);
-      setDish(data);
+      if (data) setDish(data);
+      else console.warn("Dish not found:", dishId);
     };
     fetchDish();
   }, [dishId]);
@@ -35,8 +36,13 @@ export function useDishDetailViewModel(dishId) {
       quantity,
       options: selectedOptions,
     };
-    await addItemToCart(item);
-    alert("Item added to cart!");
+    try{
+      await addItemToCart(item);
+      console.log("Item added to cart:", item);
+      alert("✅ Item added to cart!");
+    }catch{
+      console.error("Error adding item to cart:", error);
+    }
   };
     
 

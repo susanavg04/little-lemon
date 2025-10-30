@@ -1,10 +1,9 @@
 
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import Button from "./View/components/Button";
-import { useOnboardingViewModel } from "./ViewModel/useOnboardingViewModel";
+import { useOnboardingViewModel } from "./ViewModel/OnboardingViewModel";
 
-
-export default function onboarding ()  {
+export default function Onboarding ()  {
 
   const {
     firstname,
@@ -43,7 +42,16 @@ export default function onboarding ()  {
         keyboardType="email-address"
         textContentType="emailAddress"
         placeholder={"Type your email"}
+        autoCapitalize="none"
+        autoCorrect={false}
       />
+       
+      {!isEmailValid && email.length > 0 && (
+        <Text style={{ color: "red", fontSize: 14 }}>
+         Please enter a valid email address.
+        </Text>
+      )}
+
       <Text>Name</Text>
       <TextInput
         style={styles.input}
@@ -52,6 +60,8 @@ export default function onboarding ()  {
         keyboardType="default"
         textContentType="name"
         placeholder={"First Name"}
+        autoCapitalize="none"
+        autoCorrect={false}
       />
       <Text>Password</Text>
         <TextInput
@@ -61,15 +71,18 @@ export default function onboarding ()  {
           secureTextEntry
           textContentType="password"
           placeholder="Enter your password"
+          autoCapitalize="none"
+          autoCorrect={false}  
         />
 
 
-        {!isPasswordValid && password.length > 0 && (
+
+         {!isPasswordValid && password.length > 0 && (
           <Text style={{ color: "red", fontSize: 14 }}>
             Password must have at least 8 characters, 
             1 uppercase, 1 lowercase, 1 number and 1 special character.
           </Text>
-        )}
+         )}
       </View>
       <View style= {styles.section3}>
       <Button title="Registrar" onPress={registrar} />
@@ -90,7 +103,9 @@ const styles = StyleSheet.create({
   section1: {flex:2},
   section2:{
     flex:5, 
-    backgroundColor: '#49SE57',
+    backgroundColor: '#49DE57',
+    padding: 20,
+    borderRadius: 10,
   },
   section3:{flex:3},
   title: {
@@ -111,7 +126,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     padding: 10,
     fontSize: 16,
-    borderColor: "EDEFEE",
+    borderColor: "#EDEFEE",
   },
 });
 

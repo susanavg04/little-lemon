@@ -9,19 +9,19 @@ export async function createTable() {
     db.transaction(
       (tx) => {
         tx.executeSql(
-          'create table if not exists menuitems (id integer primary key not null, uuid text, title text, price text, category text);'
+          'create table if not exists menuitems (id integer primary key not null, uuid text unique, title text, price text, category text);'
         );
       },
       reject,
       resolve
     );
   });
-};
+}
 
 export async function getMenuItems() {
   return new Promise((resolve) => {
     db.transaction((tx) => {
-      tx.executeSql('select * from menuitems', [], (_, { rows }) => {
+      tx.executeSql('SELECT * from menuitems', [], (_, { rows }) => {
         resolve(rows._array);
       });
     });
@@ -30,16 +30,14 @@ export async function getMenuItems() {
 
 export function saveMenuItems(menuItems) {
   db.transaction((tx) => {
-    tx.executeSql(
-      `insert into menuitems (uuid, title, price, category) values ${menuItems
-        .map(
-          (item) =>
-            `('${item.id}', '${item.title}', '${item.price}', '${item.category}')`
-        )
-        .join(', ')}`
-    );
+    menuItems.forEach((item) => {
+      tx.executeSql(
+        'INSERT INTO menuitems (uuid, title, price, category) VALUES (?, ?, ?, ?)',
+        [item.id, item.title, item.price, item.category]
+      );
+    });
   });
-};
+}
 
 export async function filterByQueryAndCategories(query, activeCategories) {
   return new Promise((resolve, reject) => {
@@ -94,7 +92,7 @@ export async function getDishById(id) {
   return new Promise((resolve, reject) => {
     db.transaction((tx) => {
       tx.executeSql(
-        'SELECT * FROM menuitems WHERE id = ?',
+        'SELECT * FROM menuitems WHERE uuid = ?',
         [id],
         (_, { rows }) => {
           resolve(rows._array[0]); // un solo plato

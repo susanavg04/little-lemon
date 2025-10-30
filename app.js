@@ -1,13 +1,16 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+
 import Cartscreen from "./View/screens/Cartscreen";
 import Dishdetailscreen from "./View/screens/Dishdetailscreen";
-import home from './View/screens/home';
-import onboarding from './View/screens/onboarding';
-import profile from './View/screens/profile';
-import splashscreen from './View/screens/splashscreen';
+import Home from './View/screens/Home';
+import Onboarding from "./View/screens/Onboarding";
+import Profile from './View/screens/Profile';
+import Splashscreen from './View/screens/splashscreen';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -22,13 +25,13 @@ function App() {
     useEffect(() => {
     const checkOnboardingStatus = async () => {
       try {
-        const value = await AsyncStorage.getItem('onboarding_completed');
+        const value = await AsyncStorage.getItem('Onboarding_completed');
         setState({
           isLoading: false,
           isOnboardingCompleted: value === 'true', 
         });
       } catch (e) {
-        console.error('Error reading onboarding status', e);
+        console.error('Error reading Onboarding status', e);
         setState({ isLoading: false, isOnboardingCompleted: false });
       }
     };
@@ -39,27 +42,23 @@ function App() {
      return (
     <SafeAreaProvider>
       <NavigationContainer>
-    <Stack.Navigator screenOptions={{headerShown:false}}>
-      {state.isLoading? (
-        <Stack.Screen name="splashscreen" component={splashscreen} />
+       <Stack.Navigator screenOptions={{headerShown:false}}>
+         {state.isLoading? (
+          <Stack.Screen name="Splashscreen" component={Splashscreen} />
+          ): state.isOnboardingCompleted ? (
+          <>
+          <Stack.Screen name="Home" component={Home} /> 
+          <Stack.Screen name="DishDetail" component={Dishdetailscreen} />
+          <Stack.Screen name="Cart" component={Cartscreen} />
+          <Stack.Screen name="Profile" component={Profile} />
+        </>
       ):(
-      <>
-     {state.isOnboardingCompleted ? (
-      <>
-      <Stack.Screen name="Home" component={home} /> 
-      <Stack.Screen name="DishDetail" component={Dishdetailscreen} />
-      <Stack.Screen name="Cart" component={Cartscreen} />
-      </>
-      ):(
-      <>
-     <Stack.Screen name="Profile" component={profile} />
-     <Stack.Screen name="Onboarding" component={onboarding} /> 
-      </>
+       <>
+        <Stack.Screen name="Onboarding" component={Onboarding} /> 
+       </>
    )};
-   </>
-  )};
-   </Stack.Navigator>
-   </NavigationContainer>
+        </Stack.Navigator>
+      </NavigationContainer>
    </SafeAreaProvider>
     
    

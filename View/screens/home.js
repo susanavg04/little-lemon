@@ -1,6 +1,9 @@
+import { useNavigation } from '@react-navigation/native';
 import {
+  Image,
   Pressable,
   SafeAreaView,
+  ScrollView,
   SectionList,
   StatusBar,
   StyleSheet,
@@ -12,7 +15,6 @@ import Filters from './View/components/Filter';
 import Header from './View/components/Header';
 import { useHomeViewModel } from './ViewModel/Utils';
 
-
 const sections = ['Appetizers', 'Salads', 'Beverages'];
 
 const Item = ({ title, price }) => (
@@ -22,20 +24,25 @@ const Item = ({ title, price }) => (
   </View>
 );
 
-export default function home() {
+export default function Home() {
+
+  const navigation = useNavigation();
 
   const {
     data,
-    sections,
+    sections: MENU_SECTIONS,
     searchBarText,
     handleSearchChange,
     filterSelections,
     handleFiltersChange,
   } = useHomeViewModel();
   
-  <View style={styles.container}>
+ 
+  return (
+      
+    <SafeAreaView style={styles.container}>
      <Header />
-    <ScrollView style={styles.container}>
+      <ScrollView style={styles.container}>
       <View style={styles.headerWrapper}>
         <Image
           style={styles.image}
@@ -45,23 +52,21 @@ export default function home() {
           accessibilityLabel={'Little Lemon Logo'}
         />
 
-      <Text style={styles.headerText}>Little Lemon</Text>
+       <Text style={styles.headerText}>Little Lemon</Text>
       </View>
-      <Text style={styles.regularText}>
+       <Text style={styles.regularText}>
         We are a family owned Mediterranean restaurant focused on traditional recipes served with a modern twist.
-      </Text>
+       </Text>
       
       <Pressable
-        onPress={() => navigation.navigate('profile')}
+        onPress={() => navigation.navigate('Profile')}
         style={styles.button}>
         <Text style={styles.buttonText}>Profile</Text>
       </Pressable>
       
     </ScrollView>
-    </View>
- 
-  return (
-    <SafeAreaView style={styles.container}>
+  
+
       <Searchbar
         placeholder="Search"
         placeholderTextColor="white"

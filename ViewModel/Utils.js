@@ -30,7 +30,7 @@ export function getSectionListData(data) {
 export function useUpdateEffect(effect, dependencies = []) {
   const isInitialMount = useRef(true);
 
-  useEffect(() => {
+  useCallback(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {
@@ -38,14 +38,14 @@ export function useUpdateEffect(effect, dependencies = []) {
     }
   }, dependencies);
 };
-const sections = ["Appetizers", "Salads", "Beverages"];
+const MENU_SECTIONS = ["Appetizers", "Salads", "Beverages"];
 
 export function useHomeViewModel() {
   const [data, setData] = useState([]);
   const [searchBarText, setSearchBarText] = useState("");
   const [query, setQuery] = useState("");
   const [filterSelections, setFilterSelections] = useState(
-    sections.map(() => false)
+    MENU_SECTIONS.map(() => false)
   );
 
   // Cargar menú inicial
@@ -63,7 +63,7 @@ export function useHomeViewModel() {
   // Actualizar al filtrar o buscar
   useUpdateEffect(() => {
     (async () => {
-      const activeCategories = sections.filter((s, i) => {
+      const activeCategories = MENU_SECTIONS.filter((s, i) => {
         if (filterSelections.every((f) => f === false)) return true;
         return filterSelections[i];
       });
@@ -79,6 +79,10 @@ export function useHomeViewModel() {
   // Debounced search
   const lookup = useCallback((q) => setQuery(q), []);
   const debouncedLookup = useMemo(() => debounce(lookup, 500), [lookup]);
+  
+  useEffect(() => {
+  return () => debouncedLookup.cancel();
+  }, [debouncedLookup]);
 
   const handleSearchChange = (text) => {
     setSearchBarText(text);
@@ -93,7 +97,7 @@ export function useHomeViewModel() {
 
   return {
     data,
-    sections,
+    sections: MENU_SECTIONS,
     searchBarText,
     handleSearchChange,
     filterSelections,

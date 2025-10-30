@@ -1,10 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
 import { deleteProfile, saveProfile } from "../Model/DataBase_AsyncStorage";
 
 export const useProfileViewModel = () => {
 
-  const [firstname, setfirstname] = useState("");
+  const [firstName, setfirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -16,14 +17,14 @@ export const useProfileViewModel = () => {
     newsletter: true,
   });
 
-  const iniciales = `${firstname?.[0] || ""}${lastname?.[0] || ""}`;
+  const iniciales = `${firstName?.[0] || ""}${lastName?.[0] || ""}`;
 
    useEffect(() => {
      const cargarDatos = async () => {
        try {
          const nombreGuardado = await AsyncStorage.getItem(`nombre_${email}`);
          const correoGuardado = await AsyncStorage.getItem(`email_${email}`);
-       if (nombreGuardado) setfirstname(nombreGuardado);
+       if (nombreGuardado) setfirstName(nombreGuardado);
        if (correoGuardado) setEmail(correoGuardado);
  
        } catch (e) {
@@ -39,7 +40,7 @@ export const useProfileViewModel = () => {
   };
 
   const handleSave = async () => {
-    const perfil = { firstname, lastName, email, phone, imagenUri, notifications };
+    const perfil = { firstName, lastName, email, phone, imagenUri, notifications };
     await saveProfile(email, perfil);
   };
 
@@ -69,8 +70,8 @@ export const useProfileViewModel = () => {
   };
 
   return {
-    firstname,
-    setfirstname,
+    firstName,
+    setfirstName,
     lastName,
     setLastName,
     email,
