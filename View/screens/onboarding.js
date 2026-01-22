@@ -1,7 +1,7 @@
 
 import { Image, StyleSheet, Text, TextInput, View } from "react-native";
-import Button from "./View/components/Button";
-import { useOnboardingViewModel } from "./ViewModel/OnboardingViewModel";
+import { useOnboardingViewModel } from "../../ViewModel/Onboardingviewmodel";
+import Button from "../components/Button";
 
 export default function Onboarding ()  {
 
@@ -26,7 +26,7 @@ export default function Onboarding ()  {
       <View style= {styles.section1}>
       <Image
         style={styles.logo}
-        source={require('../assets/images/logo.png')}
+        source={require('../../assets/images/logo.png')}
       />
       </View>
       <View style= {styles.section2}>

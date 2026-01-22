@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { getCartTotals, removeItemFromCart } from "../Model/Cartservice";
+import { getCartTotals, removeItemFromCart } from "../../Model/Cartservices";
 
 export default function Cartscreen() {
   const [cartData, setCartData] = useState({ cart: [], subtotal: 0, delivery: 0, service: 0, total: 0 });

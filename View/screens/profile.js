@@ -1,8 +1,8 @@
 
 import { Image, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from "react-native-mask-text";
-import { useProfileViewModel } from "../ViewModel/VM_Profile";
-import Header from '../component/Header';
+import { useProfileViewModel } from "../../ViewModel/Vm_profile";
+import Header from '../components/Header';
 
 
 export default function ProfileScreen({navigation}) {

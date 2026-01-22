@@ -11,9 +11,9 @@ import {
   View
 } from 'react-native';
 import { Searchbar } from 'react-native-paper';
-import Filters from './View/components/Filter';
-import Header from './View/components/Header';
-import { useHomeViewModel } from './ViewModel/Utils';
+import { useHomeViewModel } from '../../ViewModel/Utils';
+import Filters from '../components/Filter';
+import Header from '../components/Header';
 
 const sections = ['Appetizers', 'Salads', 'Beverages'];
 
@@ -46,7 +46,7 @@ export default function Home() {
       <View style={styles.headerWrapper}>
         <Image
           style={styles.image}
-          source={require('./assets/images/logo.png')}
+          source={require('../../assets/images/logo.png')}
           resizeMode="cover"
           accessible={true}
           accessibilityLabel={'Little Lemon Logo'}

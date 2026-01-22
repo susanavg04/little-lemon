@@ -9,7 +9,7 @@ import Dishdetailscreen from "./View/screens/Dishdetailscreen";
 import Home from './View/screens/Home';
 import Onboarding from "./View/screens/Onboarding";
 import Profile from './View/screens/Profile';
-import Splashscreen from './View/screens/splashscreen';
+import Splashscreen from './View/screens/Splashscreen';
 
 
 
@@ -39,24 +39,26 @@ function App() {
     checkOnboardingStatus();
   }, []);
 
+  if (state.isLoading) {
+    return <Splashscreen />; 
+  }
+
      return (
     <SafeAreaProvider>
       <NavigationContainer>
        <Stack.Navigator screenOptions={{headerShown:false}}>
-         {state.isLoading? (
-          <Stack.Screen name="Splashscreen" component={Splashscreen} />
-          ): state.isOnboardingCompleted ? (
+         { state.isOnboardingCompleted === false ? (
+          <Stack.Screen name="Onboarding" component={Onboarding} /> 
+           ):(
           <>
           <Stack.Screen name="Home" component={Home} /> 
           <Stack.Screen name="DishDetail" component={Dishdetailscreen} />
           <Stack.Screen name="Cart" component={Cartscreen} />
           <Stack.Screen name="Profile" component={Profile} />
         </>
-      ):(
-       <>
-        <Stack.Screen name="Onboarding" component={Onboarding} /> 
-       </>
-   )};
+           
+
+         )};
         </Stack.Navigator>
       </NavigationContainer>
    </SafeAreaProvider>

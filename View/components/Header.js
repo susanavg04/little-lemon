@@ -12,7 +12,7 @@ export default function Header() {
     <View style={[styles.wrapper, { paddingTop: insets.top }]}>
     
       <Image
-        source={require('./assets/images/Logo.png')}
+        source={require('../../assets/images/logo.png')}
         style={styles.logo}
         resizeMode="contain"
         accessible
@@ -28,7 +28,7 @@ export default function Header() {
         accessibilityLabel="Abrir perfil"
       >
         <Image
-          source={{ require: './assets/images/Profile.png' }}
+          source={{ require: '../../assets/images/Profile.png' }}
           style={styles.avatar}
         />
       </Pressable>

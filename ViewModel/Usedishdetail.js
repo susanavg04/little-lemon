@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { addItemToCart } from "../Model/Cartservices";
 import { getDishById } from "../Model/Database_SQLite";
 
-export function useDishDetailViewModel(dishId) {
+export default function Usedishdetailviewmodel(dishId) {
   const [dish, setDish] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [options, setOptions] = useState([

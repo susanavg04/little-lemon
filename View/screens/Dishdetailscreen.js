@@ -1,10 +1,11 @@
 
 import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Usedishdetailviewmodel from "../../ViewModel/Usedishdetail";
 import OptionSelector from "../components/Optionselector";
 import QuantitySelector from "../components/Quantityselector";
-import { useDishDetailViewModel } from "../ViewModel/useDishDetailViewModel";
 
-export default function DishDetailScreen({ route, navigation }) {
+
+export default function Dishdetailscreen({ route, navigation }) {
   const { dishId } = route.params; // viene del menu
   const {
     dish,
@@ -14,14 +15,14 @@ export default function DishDetailScreen({ route, navigation }) {
     increaseQuantity,
     decreaseQuantity,
     addToCart
-  } = useDishDetailViewModel(dishId);
+  } = Usedishdetailviewmodel(dishId);
 
   const dishImages = {
-  "Bruschetta": require("./assets/images/Bruschetta.png"),
-  "Greek salad": require("./assets/images/Greek salad.png"),
-  "Pasta": require("../assets/images/Pasta.png"),
-  "Grilled fish": require("./assets/images/Grilled fish.png"),
-  "Lemon dessert": require("../assets/images/Lemon dessert.png"),
+  "Bruschetta": require("../../assets/images/Bruschetta.png"),
+  "Greek salad": require("../../assets/images/Greek salad.png"),
+  "Pasta": require("../../assets/images/Pasta.png"),
+  "Grilled fish": require("../../assets/images/Grilled fish.png"),
+  "Lemon dessert": require("../../assets/images/Lemon dessert.png"),
 };
 
   if (!dish) return <Text>Cargando...</Text>;
@@ -33,7 +34,7 @@ export default function DishDetailScreen({ route, navigation }) {
       <Text style={styles.description}>{dish.price}</Text>
       <View style={{ flexDirection: "row", alignItems: "center", marginVertical: 8 }}>
        <Image
-         source={require("../assets/images/Delivery van.png")}
+         source={require("../../assets/images/Delivery van.png")}
          style={{ width: 24, height: 24, marginRight: 8 }}
          resizeMode="contain"
          />
