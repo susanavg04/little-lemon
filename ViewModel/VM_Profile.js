@@ -5,7 +5,7 @@ import { deleteProfile, saveProfile } from "../Model/DataBase_AsyncStorage";
 
 export const useProfileViewModel = () => {
 
-  const [firstName, setfirstName] = useState("");
+  const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
@@ -17,14 +17,14 @@ export const useProfileViewModel = () => {
     newsletter: true,
   });
 
-  const iniciales = `${firstName?.[0] || ""}${lastName?.[0] || ""}`;
+  const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
 
    useEffect(() => {
      const cargarDatos = async () => {
        try {
-         const nombreGuardado = await AsyncStorage.getItem(`nombre_${email}`);
-         const correoGuardado = await AsyncStorage.getItem(`email_${email}`);
-       if (nombreGuardado) setfirstName(nombreGuardado);
+         const nombreGuardado = await AsyncStorage.getItem(`user_${user.email}`);
+         const correoGuardado = await AsyncStorage.getItem(`user_${user.email}`);
+       if (nombreGuardado) setfirstname(nombreGuardado);
        if (correoGuardado) setEmail(correoGuardado);
  
        } catch (e) {
@@ -40,7 +40,7 @@ export const useProfileViewModel = () => {
   };
 
   const handleSave = async () => {
-    const perfil = { firstName, lastName, email, phone, imagenUri, notifications };
+    const perfil = { firstname, lastName, email, phone, imagenUri, notifications };
     await saveProfile(email, perfil);
   };
 
@@ -70,8 +70,8 @@ export const useProfileViewModel = () => {
   };
 
   return {
-    firstName,
-    setfirstName,
+    firstname,
+    setfirstname,
     lastName,
     setLastName,
     email,

@@ -19,9 +19,7 @@ export const cargarUsuario = async (email) => {
     const data = await AsyncStorage.getItem(`user_${email}`);
     if (!data) return null; // si no existe
     const user = JSON.parse(data);
-    nombre = user.firstName;
-    correo = user.email;
-    password = user.password;
+    const { firstname:nombre, email: correo, password } = user;
     if (nombre && correo && password) {
       return { firstname: nombre, email: correo, password };
     }

@@ -7,18 +7,14 @@
     "icon": "./assets/images/logo.png",
     "scheme": "firtapplemon",
     "userInterfaceStyle": "automatic",
-    
-    
     "plugins": [
       [
         "expo-build-properties",
-        {
-          
-        }
-      ]
+        {}
+      ],
+      "expo-font",
+      "expo-router"
     ],
-
-
     "ios": {
       "supportsTablet": true
     },
@@ -27,13 +23,11 @@
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       }
-    
     },
     "web": {
       "bundler": "metro",
       "output": "single",
       "favicon": "./assets/images/logo.png"
     }
-
   }
 }

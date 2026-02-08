@@ -1,7 +1,8 @@
+import { useNavigation } from '@react-navigation/native';
 import { useState } from "react";
 import { guardarUsuario, loginUsuario } from "../Model/DataBase_AsyncStorage";
 
-export const useOnboardingViewModel = () => {
+export const useOnboardingViewModel = (onFinish) => {
 
   const validateEmail = (email) => {
    const regex = /\S+@\S+\.\S+/;
@@ -15,13 +16,14 @@ export const useOnboardingViewModel = () => {
    };
 
  
-  const [firstName, setfirstName] = useState("");
+  const [firstname, setfirstname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [mensaje, setMensaje] = useState("");
 
   const isEmailValid = validateEmail(email);
   const isPasswordValid = validatePassword(password);
+  const navigation = useNavigation();
 
   const registrar = async () => {
    if (!firstname || !email || !password) {
@@ -39,8 +41,10 @@ export const useOnboardingViewModel = () => {
     return;
    }
    try{
-    const success = await guardarUsuario({ firstName, email, password });
+    const success = await guardarUsuario({ firstname, email, password });
     setMensaje(success ? "Registered user ✅" : "Error registering ❌");
+    await onFinish();
+    navigation.navigate("MainTabs", { screen: "Profile" });
     } catch (error) {
     console.error("Error registering user:", error);
     setMensaje("Unexpected error ❌");
@@ -51,11 +55,17 @@ export const useOnboardingViewModel = () => {
     try{
     const result = await loginUsuario(email, password);
     if (result.success) {
-      setMensaje(`Bienvenido ${result.user.firstName} ✅`);
+      setMensaje(`Bienvenido ${result.user.firstname} ✅`);
+      await onFinish();
+
+      setTimeout(() => {
+       navigation.replace('Home');
+       }, 1000);
+      
     } else {
       setMensaje(result.message);
     }
-  } catch {
+  } catch (error) {
     console.error("Login error:", error);
     setMensaje("An unexpected error occurred ❌");
   }
@@ -65,11 +75,11 @@ export const useOnboardingViewModel = () => {
 
 
   return {
-    firstName,
+    firstname,
     email,
     password,
     mensaje,
-    setfirstName,
+    setfirstname,
     setEmail,
     setPassword,
     registrar,

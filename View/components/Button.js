@@ -1,13 +1,13 @@
 import { Pressable, StyleSheet, Text } from "react-native";
 
-const Button = ({onPress, children, disabled}) => {
+const Button = ({onPress, title, disabled}) => {
   return (
     <Pressable
       onPress={onPress}
       style={[styles.buttonWrapper, disabled && styles.disabled]}
       disabled={disabled}
     >
-      <Text style={styles.text}>{children}</Text>
+      <Text style={styles.text}>{title}</Text>
     </Pressable>
   );
 };
@@ -21,12 +21,13 @@ const styles = StyleSheet.create({
     padding: 8,
   },
   disabled: {
-    backgroundColor: 'grey',
+    backgroundColor: 'white',
     opacity: 0.5,
   },
   text: {
     fontSize: 16,
     color: 'black',
+    fontFamily: "Karla",
   }
 });
 

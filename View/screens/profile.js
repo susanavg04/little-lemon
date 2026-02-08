@@ -8,7 +8,7 @@ import Header from '../components/Header';
 export default function ProfileScreen({navigation}) {
 
  const {
-    firstName, setfirstName,
+    firstname, setfirstname,
     lastName, setLastName,
     email, setEmail,
     phone, setPhone,
@@ -30,13 +30,13 @@ export default function ProfileScreen({navigation}) {
           </View>
         )}
       </TouchableOpacity>
-      <Text style={styles.title}>{`${firstName} ${lastName}`}</Text>
+      <Text style={styles.title}>{`${firstname} ${lastName}`}</Text>
       <Text style={styles.sectionTitle}>Personal information</Text>
       <TextInput
         style={styles.input}
-        placeholder="First name"
-        value={firstName}
-        onChangeText={setfirstName}
+        placeholder="Firstname"
+        value={firstname}
+        onChangeText={setfirstname}
       />
       <TextInput
         style={styles.input}
@@ -165,10 +165,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   discardText: {
-    color: '#49SE57',
+    color: '#495E57',
   },
   saveButton: {
-    backgroundColor: '#49CE57',
+    backgroundColor: '#495E57',
     padding: 12,
     borderRadius: 6,
     flex: 0.45,

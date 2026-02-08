@@ -2,15 +2,13 @@ import { useNavigation } from '@react-navigation/native';
 import {
   Image,
   Pressable,
-  SafeAreaView,
-  ScrollView,
   SectionList,
-  StatusBar,
   StyleSheet,
   Text,
   View
 } from 'react-native';
 import { Searchbar } from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomeViewModel } from '../../ViewModel/Utils';
 import Filters from '../components/Filter';
 import Header from '../components/Header';
@@ -18,11 +16,17 @@ import Header from '../components/Header';
 const sections = ['Appetizers', 'Salads', 'Beverages'];
 
 const Item = ({ title, price }) => (
-  <View style={styles.item}>
-    <Text style={styles.title}>{title}</Text>
-    <Text style={styles.title}>${price}</Text>
+  <View style={styles.itemContainer}>
+    <Text style={styles.itemTitle}>{title}</Text>
+    <Text style={styles.itemPrice}>${price}</Text>
   </View>
 );
+const images = {
+ "Bruschetta": require('../../assets/images/Bruschetta.png'),
+ "Hummus": require('../../assets/images/Pasta.png'),
+  "Greek" : require('../../assets/images/Greek salad.png'),
+  "Grilled" : require('../../assets/images/Grilled fish.png'),
+};
 
 export default function Home() {
 
@@ -38,127 +42,195 @@ export default function Home() {
   } = useHomeViewModel();
   
  
-  return (
-      
-    <SafeAreaView style={styles.container}>
-     <Header />
-      <ScrollView style={styles.container}>
-      <View style={styles.headerWrapper}>
-        <Image
-          style={styles.image}
-          source={require('../../assets/images/logo.png')}
-          resizeMode="cover"
-          accessible={true}
-          accessibilityLabel={'Little Lemon Logo'}
-        />
-
-       <Text style={styles.headerText}>Little Lemon</Text>
-      </View>
-       <Text style={styles.regularText}>
-        We are a family owned Mediterranean restaurant focused on traditional recipes served with a modern twist.
-       </Text>
-      
-      <Pressable
-        onPress={() => navigation.navigate('Profile')}
-        style={styles.button}>
-        <Text style={styles.buttonText}>Profile</Text>
-      </Pressable>
-      
-    </ScrollView>
   
+    const renderHeader = () => (
+    <View>
+       <View style={styles.heroSection}>
+          <Text style={styles.heroTitle}>Little Lemon</Text>
+          <Text style={styles.heroSubtitle}>Chicago</Text>
+          <View style={styles.heroContent}>
+            <Text style={styles.heroDescription}>
+               We are a family owned Mediterranean restaurant focused on traditional recipes served with a modern twist.
+            </Text>
+            <Image
+              style={styles.heroImage}
+              source={require('../../assets/images/Hero image.png')} 
+              resizeMode="cover"
+            />
+        </View>
+        
 
-      <Searchbar
+       <Searchbar
         placeholder="Search"
-        placeholderTextColor="white"
+        placeholderTextColor="#ffffff"
         onChangeText={handleSearchChange}
         value={searchBarText}
         style={styles.searchBar}
-        iconColor="white"
-        inputStyle={{ color: 'white' }}
+        iconColor="#495E57"
+        inputStyle={{ color: '#495E57' }}
         elevation={0}
       />
-      <Filters
-        selections={filterSelections}
-        onChange={handleFiltersChange}
-        sections={sections}
-      />
+       </View>
+       <View style={styles.deliveryContainer}>
+        <Text style={styles.deliveryTitle}>ORDER FOR DELIVERY!</Text>
+           <Filters
+            selections={filterSelections}
+            onChange={handleFiltersChange}
+            sections={sections}
+          />
+        </View>
+    </View>
+    );
+      return (
+      <SafeAreaView style={styles.container}>
+      <Header /> 
       <SectionList
         style={styles.sectionList}
         sections={data}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-            <Pressable onPress={() => navigation.navigate("DishDetail", { dishId: item.id })}>
-            <Item title={item.title} price={item.price} />
-            </Pressable>
+            <Pressable 
+              style={styles.itemContainer}
+              onPress={() => navigation.navigate("DishDetail", { dishId: item.id })}
+            >
+             <View style={styles.itemTextContainer}>
+               <Text style={styles.itemTitle}>{item.title}</Text>
+               <Text style={styles.itemDescription} numberOfLines={2}>
+                {item.description}
+               </Text>
+               <Text style={styles.itemPrice}>${item.price}</Text>
+             </View>
+             <Image 
+              source={images[item.title]} 
+              style={styles.itemImage} 
+             />
+          </Pressable>
+          
         )}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
       />
-    </SafeAreaView>
-  );
-}
-
+      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      </SafeAreaView>
+      ) 
+    };
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
-  headerWrapper: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    margin: 10,
+  // --- SECCIÓN HERO (BANNER VERDE) ---
+  heroSection: {
+    backgroundColor: '#495E57',
+    paddingHorizontal: 20,
+    paddingVertical: 25,
   },
-  headerText: {
-    paddingRight: 10,
-    paddingLeft: 20,
-    paddingTop: 30,
-    paddingBottom: 10,
+  heroTitle: {
+    fontSize: 45,
+    color: '#F4CE14',
+    fontWeight: 'bold',
+    fontFamily: 'MarkaziText-Regular', 
+    marginBottom: -10, 
+  },
+  heroSubtitle: {
     fontSize: 30,
     color: '#EDEFEE',
-    textAlign: 'center',
+    fontFamily: 'MarkaziText-Regular',
+    marginBottom: 15,
   },
-  regularText: {
-    fontSize: 24,
-    padding: 20,
-    marginVertical: 8,
-    color: '#EDEFEE',
-    textAlign: 'center',
-  },
-  image: {
-    width: 100,
-    height: 100,
-    borderRadius: 20,
-  },
-  container2: {
-    flex: 1,
-    paddingTop: StatusBar.currentHeight,
-    backgroundColor: '#495E57',
-  },
-  sectionList: {
-    paddingHorizontal: 16,
-  },
-  searchBar: {
-    marginBottom: 24,
-    backgroundColor: '#495E57',
-    shadowRadius: 0,
-    shadowOpacity: 0,
-  },
-  item: {
+  heroContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 20,
+  },
+  heroDescription: {
+    fontSize: 16,
+    color: '#EDEFEE',
+    flex: 1,
+    paddingRight: 15,
+    lineHeight: 22,
+    fontFamily: "Karla-Regular",
+  },
+  heroImage: {
+    width: 130,
+    height: 140,
+    borderRadius: 16,
+  },
+  searchBar: {
+    backgroundColor: '#EDEFEE',
+    borderRadius: 10,
+    height: 50,
+    elevation: 0, 
+  },
+
+  // --- SECCIÓN DELIVERY Y FILTROS ---
+  deliveryContainer: {
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+  },
+  deliveryTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: '#333333',
+    marginBottom: 15,
+    textTransform: 'uppercase', 
+    fontFamily: "Karla-Regular",
+  },
+
+  // --- LISTADO DE PLATOS (SECTIONLIST) ---
+  sectionHeader: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    backgroundColor: '#FFFFFF',
+    color: '#333333',
+  },
+  itemContainer: {
+    flexDirection: 'row',
+    padding: 20,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 16,
   },
-  header: {
-    fontSize: 24,
-    paddingVertical: 8,
-    color: '#FBDABB',
-    backgroundColor: '#495E57',
+  itemTextContainer: {
+    flex: 1,
+    paddingRight: 15,
   },
-  title: {
-    fontSize: 20,
-    color: 'white',
+  itemTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#000000',
+    marginBottom: 8,
+    fontFamily: "Karla-Regular",
+  },
+  itemDescription: {
+    fontSize: 14,
+    color: '#495E57',
+    lineHeight: 20,
+    fontFamily: "Karla-Regular",
+  },
+  itemPrice: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#495E57',
+    marginTop: 10,
+    fontFamily: "Karla-Regular",
+  },
+  itemImage: {
+    width: 90,
+    height: 90,
+    borderRadius: 8,
+  },
+  separator: {
+    height: 1,
+    backgroundColor: '#EDEFEE',
+    marginHorizontal: 20,
   },
 });
+
+
+
 

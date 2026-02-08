@@ -1,28 +1,28 @@
 import * as SQLite from 'expo-sqlite';
 const API_URL =
   'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu-items-by-category.json';
-const db = SQLite.openDatabaseSync('little_lemon');
+const db = SQLite.openDatabaseSync('little_lemon.db');
 
 
 export async function createTable() {
-  return db.executeSql(
+  return db.execAsync(
           'create table if not exists menuitems (id integer primary key not null, uuid text unique, title text, price text, category text);'
         );
       }
 
 
 export async function getMenuItems() {
-  return await db.getAllAsync('SELECT * from menuitems', [], (_, { rows }) => {
-        resolve(rows._array);
-      });
+  const rows = await db.getAllAsync('SELECT * FROM menuitems');
+  return rows;
 };
+
 
 
 export async function saveMenuItems(menuItems) {
   for (const item of menuItems) {
       try{
         await db.runAsync(
-        'INSERT INTO menuitems (uuid, title, price, category) VALUES (?, ?, ?, ?)',
+        'INSERT OR IGNORE INTO menuitems (uuid, title, price, category) VALUES (?, ?, ?, ?)',
         [item.id, item.title, item.price, item.category]
        );
       
@@ -77,13 +77,18 @@ export async function fetchMenu() {
     const response = await fetch(API_URL);
     const json = await response.json();
     
+    
     // Normalizamos los datos
-    menuItems = json.menu.map((item) => ({
+    const normalizedItems = json.menu.map((item) => ({
       ...item,
       category: item.category.title,
     }));
 
-    await saveMenuItems(menuItems);
+    // Guardamos en SQLite
+    await saveMenuItems(normalizedItems);
+
+    // Volvemos a leer desde la DB
+    menuItems = await getMenuItems();
   }
   return menuItems;
 }

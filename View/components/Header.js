@@ -2,14 +2,14 @@ import { useNavigation } from '@react-navigation/native';
 import { Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function Header() {
+export default function Header({ imagenUri, iniciales }) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
   const goToProfile = () => navigation.navigate('profile');
 
   return (
-    <View style={[styles.wrapper, { paddingTop: insets.top }]}>
+    <View style={[styles.wrapper, { paddingTop: insets.top + 10 }]}>
     
       <Image
         source={require('../../assets/images/logo.png')}
@@ -18,20 +18,17 @@ export default function Header() {
         accessible
         accessibilityLabel="Little Lemon"
       />
-
+      <Pressable onPress={goToProfile} style={styles.avatarButton}>
+        {imagenUri ? (
+            <Image source={{ uri: imagenUri }} style={styles.avatar} />
+         ) : (
+      <View style={[styles.avatar, { backgroundColor: '#495E57', justifyContent: 'center', alignItems: 'center' }]}>
+        <Text style={{ color: '#fff', fontWeight: 'bold' }}>{iniciales}</Text>
+      </View>
+    )}
+  </Pressable>
       
-      <Pressable
-        onPress={goToProfile}
-        style={styles.avatarButton}
-        hitSlop={12}
-        accessibilityRole="button"
-        accessibilityLabel="Abrir perfil"
-      >
-        <Image
-          source={{ require: '../../assets/images/Profile.png' }}
-          style={styles.avatar}
-        />
-      </Pressable>
+  
     </View>
   );
 }
@@ -39,25 +36,28 @@ export default function Header() {
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#FFFFFF',
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 16,
-    paddingBottom: 10,
+    paddingBottom: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: '#E6E6E6',
+    borderBottomColor: '#EDEFEE',
   },
   logo: {
-    height: 28,
-    width: '50%', 
+    height: 40,
+    width: '150%', 
   },
   avatarButton: {
     position: 'absolute',
     right: 16,
     top: Platform.select({ ios: 8, android: 8 }),
+    bottom: 10,
   },
   avatar: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#CBD2D9'
   },
 });

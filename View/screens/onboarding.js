@@ -3,7 +3,7 @@ import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { useOnboardingViewModel } from "../../ViewModel/Onboardingviewmodel";
 import Button from "../components/Button";
 
-export default function Onboarding ()  {
+export default function Onboarding ({ navigation, onFinish })  {
 
   const {
     firstname,
@@ -18,7 +18,7 @@ export default function Onboarding ()  {
     isEmailValid,
     isPasswordValid,
 
-  } = useOnboardingViewModel();
+  } = useOnboardingViewModel(onFinish);
 
 
   return (
@@ -30,8 +30,8 @@ export default function Onboarding ()  {
       />
       </View>
       <View style= {styles.section2}>
-      <Text style={styles.title}>
-        Let us get to know you
+      <Text style={styles.title1}>
+        Hello!!
       </Text>
 
       <Text>Email</Text>
@@ -85,8 +85,17 @@ export default function Onboarding ()  {
          )}
       </View>
       <View style= {styles.section3}>
-      <Button title="Registrar" onPress={registrar} />
-      <Button title="Login" onPress={login} />
+      <Button title="Crear Perfil" onPress= {async () => {
+       const success = await registrar(); 
+       if (success) onFinish(); 
+       }} />
+      <View style={{ height: 12 }} />
+      <Button title="Login in" onPress= {async () => {
+       const success = await login(); 
+       if (success) onFinish();
+       }} 
+      />
+      
 
       {mensaje ? <Text style={{ marginTop: 20 }}>{mensaje}</Text> : null}
     </View>
@@ -103,30 +112,50 @@ const styles = StyleSheet.create({
   section1: {flex:2},
   section2:{
     flex:5, 
-    backgroundColor: '#49DE57',
+    backgroundColor: '#495E57',
     padding: 20,
     borderRadius: 10,
   },
-  section3:{flex:3},
-  title: {
-    color: "#333333",
+  section2: {
+    flex: 5, 
+    backgroundColor: '#495E57',
+    padding: 20,
+    borderRadius: 10,
+    marginBottom: 10, // Añadimos margen inferior para separar del área amarilla
+  },
+  section3:{
+    flex: 3,
+    justifyContent: 'center', // Centra los botones verticalmente en su sección
+    paddingVertical: 10,
+  },
+  text: {
+    color: "#FFFFFF",
     textAlign: "center",
     fontSize: 20,
+    fontFamily: "Karla",
+  },
+    title1: {
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontSize: 20,
+    fontFamily: "MarkaziText",
+    fontWeight: "bold",
   },
   logo: {
-    height: 100,
-    width: 300,
+    height: 100, // Tamaño más razonable para un logo superior
+    width: '100%',
     resizeMode: "contain",
-    marginBottom: 32,
+
   },
   input: {
     height: 40,
-    marginVertical: 24,
+    marginVertical: 15,
     borderRadius: 8,
     borderWidth: 1,
     padding: 10,
     fontSize: 16,
     borderColor: "#EDEFEE",
+    fontFamily: "Karla",
   },
 });
 
