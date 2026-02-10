@@ -20,7 +20,7 @@ export default function ProfileScreen({navigation}) {
   return (
     <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
-      <Header/>
+      <Header imagenUri={imagenUri} iniciales={iniciales}/>
       <TouchableOpacity onPress={seleccionarImagen}>
         {imagenUri ? (
           <Image source={{ uri: imagenUri }} style={styles.avatar} />
@@ -59,6 +59,17 @@ export default function ProfileScreen({navigation}) {
         onChangeText={(text, rawText) => setPhone(rawText)}
         keyboardType="phone-pad"
       />
+       <Text>Password</Text>
+        <TextInput
+        style={styles.input}
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+        textContentType="password"
+        placeholder="Enter your password"
+        autoCapitalize="none"
+        autoCorrect={false}  
+      />
 
       <Text style={styles.sectionTitle}>Email notifications</Text>
       {[
@@ -96,12 +107,13 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     backgroundColor: '#fff',
-    flex: 1,
+    
   },
   title: {
     fontWeight: 'bold',
     fontSize: 20,
     marginBottom: 10,
+    paddingBottom:40,
   },
   avatar: {
     width: 80,

@@ -3,6 +3,7 @@ import { Image, StyleSheet, Text, TextInput, View } from "react-native";
 import { useOnboardingViewModel } from "../../ViewModel/Onboardingviewmodel";
 import Button from "../components/Button";
 
+
 export default function Onboarding ({ navigation, onFinish })  {
 
   const {
@@ -74,9 +75,6 @@ export default function Onboarding ({ navigation, onFinish })  {
           autoCapitalize="none"
           autoCorrect={false}  
         />
-
-
-
          {!isPasswordValid && password.length > 0 && (
           <Text style={{ color: "red", fontSize: 14 }}>
             Password must have at least 8 characters, 
@@ -93,6 +91,7 @@ export default function Onboarding ({ navigation, onFinish })  {
       <Button title="Login in" onPress= {async () => {
        const success = await login(); 
        if (success) onFinish();
+       navigation.navigate('Home');
        }} 
       />
       

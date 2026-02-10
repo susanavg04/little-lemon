@@ -1,15 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import { Image, Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Image, Platform, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export default function Header({ imagenUri, iniciales }) {
+export default function Header({imagenUri, iniciales}) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
-  const goToProfile = () => navigation.navigate('profile');
+  const goTonboarding = () => navigation.navigate('Onboarding');
 
   return (
-    <View style={[styles.wrapper, { paddingTop: insets.top + 10 }]}>
+    <View style={[styles.wrapper, { paddingTop: insets.top + 5 }]}>
     
       <Image
         source={require('../../assets/images/logo.png')}
@@ -18,7 +18,7 @@ export default function Header({ imagenUri, iniciales }) {
         accessible
         accessibilityLabel="Little Lemon"
       />
-      <Pressable onPress={goToProfile} style={styles.avatarButton}>
+      {<Pressable onPress={goTonboarding} style={styles.avatarButton}>
         {imagenUri ? (
             <Image source={{ uri: imagenUri }} style={styles.avatar} />
          ) : (
@@ -26,8 +26,9 @@ export default function Header({ imagenUri, iniciales }) {
         <Text style={{ color: '#fff', fontWeight: 'bold' }}>{iniciales}</Text>
       </View>
     )}
-  </Pressable>
-      
+    </Pressable>
+    }
+     
   
     </View>
   );
@@ -45,7 +46,7 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EDEFEE',
   },
   logo: {
-    height: 40,
+    height: 80,
     width: '150%', 
   },
   avatarButton: {

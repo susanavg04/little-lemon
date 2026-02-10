@@ -1,7 +1,6 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from "react";
-import { deleteProfile, saveProfile } from "../Model/DataBase_AsyncStorage";
+import { cargarUsuario, deleteProfile, saveProfile } from "../Model/DataBase_AsyncStorage";
 
 export const useProfileViewModel = () => {
 
@@ -19,22 +18,23 @@ export const useProfileViewModel = () => {
 
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
 
-   useEffect(() => {
-     const cargarDatos = async () => {
-       try {
-         const nombreGuardado = await AsyncStorage.getItem(`user_${user.email}`);
-         const correoGuardado = await AsyncStorage.getItem(`user_${user.email}`);
-       if (nombreGuardado) setfirstname(nombreGuardado);
-       if (correoGuardado) setEmail(correoGuardado);
- 
-       } catch (e) {
-         console.error('Error al cargar los datos', e);
-       }
-     };
- 
-     cargarDatos();
-   }, []);
+useEffect(() => {
+    const fetchUserData = async () => {
+        
+        if (email) { 
+            const userData = await cargarUsuario(email);
 
+            if (userData) {
+                
+                setFirstname(userData.firstname || "");
+
+            }
+        }
+    };
+
+    fetchUserData(); 
+}, [email]);
+ 
   const handleToggle = (key) => {
     setNotifications({ ...notifications, [key]: !notifications[key] });
   };
