@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Image, Platform, StyleSheet, View } from 'react-native';
+import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Header({imagenUri, iniciales}) {
@@ -47,7 +47,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     height: 80,
-    width: '150%', 
+    width: '100%',
+    alignSelf: 'center',
+    resizeMode:"contain" 
   },
   avatarButton: {
     position: 'absolute',

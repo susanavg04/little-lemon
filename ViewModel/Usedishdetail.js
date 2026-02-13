@@ -40,7 +40,7 @@ export default function Usedishdetailviewmodel(dishId) {
       await addItemToCart(item);
       console.log("Item added to cart:", item);
       alert("✅ Item added to cart!");
-    }catch{
+    }catch(error){
       console.error("Error adding item to cart:", error);
     }
   };

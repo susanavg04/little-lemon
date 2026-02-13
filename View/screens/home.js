@@ -83,7 +83,8 @@ export default function Home() {
     );
       return (
       <SafeAreaView style={styles.container}>
-      <Header /> 
+      <Header />
+      {renderHeader()}
       <SectionList
         style={styles.sectionList}
         sections={data}
@@ -91,7 +92,7 @@ export default function Home() {
         renderItem={({ item }) => (
             <Pressable 
               style={styles.itemContainer}
-              onPress={() => navigation.navigate("DishDetail", { dishId: item.id })}
+              onPress={() => navigation.navigate("Dishdetail", { dishId: item.id })}
             >
              <View style={styles.itemTextContainer}>
                <Text style={styles.itemTitle}>{item.title}</Text>
@@ -110,8 +111,9 @@ export default function Home() {
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.header}>{title}</Text>
         )}
+        ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
-      ItemSeparatorComponent={() => <View style={styles.separator} />}
+      
       </SafeAreaView>
       ) 
     };

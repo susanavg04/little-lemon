@@ -86,12 +86,19 @@ export default function Onboarding ({ navigation, onFinish })  {
       <Button title="Crear Perfil" onPress= {async () => {
        const success = await registrar(); 
        if (success) onFinish(); 
+       navigation.reset({
+        index: 0,
+        routes: [{ name: "MainTabs" }],
+        });
        }} />
       <View style={{ height: 12 }} />
       <Button title="Login in" onPress= {async () => {
        const success = await login(); 
        if (success) onFinish();
-       navigation.navigate('Home');
+       navigation.reset({
+        index: 0,
+        routes: [{ name: "MainTabs" }],
+       });
        }} 
       />
       
@@ -109,12 +116,6 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
   },
   section1: {flex:2},
-  section2:{
-    flex:5, 
-    backgroundColor: '#495E57',
-    padding: 20,
-    borderRadius: 10,
-  },
   section2: {
     flex: 5, 
     backgroundColor: '#495E57',

@@ -26,7 +26,7 @@ useEffect(() => {
 
             if (userData) {
                 
-                setFirstname(userData.firstname || "");
+                setfirstname(userData.firstname || "");
 
             }
         }
@@ -69,6 +69,8 @@ useEffect(() => {
 
   };
 
+  const [password, setPassword] = useState("");
+
   return {
     firstname,
     setfirstname,
@@ -78,6 +80,8 @@ useEffect(() => {
     setEmail,
     phone,
     setPhone,
+    password,
+    setPassword,
     imagenUri,
     iniciales,
     notifications,

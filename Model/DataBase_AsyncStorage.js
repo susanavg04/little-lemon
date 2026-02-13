@@ -50,18 +50,18 @@ export const loginUsuario = async (email, password) => {
      
       try {
         if (!email) throw new Error("No se puede guardar perfil sin email");
-        await AsyncStorage.setItem(`user_${user.email}`,JSON.stringify(perfil));
-        console.log("Data saved successfully");
-      } catch (error) {
-        console.error("Error saving profile:", error);
-      }}
-    
+        await AsyncStorage.setItem(`user_${email}`,JSON.stringify(perfil));
+       } catch (error) {
+          console.error('Error saving profile:',error);
+          Alert.alert('Error', 'Profile could not be saved');
+        }
+    }   
   export const deleteProfile =  async(email) => {
        
         try {
 
           if (!email) throw new Error("No se puede eliminar perfil sin email");
-          await AsyncStorage.removeItem(`user_${user.email}`);
+          await AsyncStorage.removeItem(`user_${email}`);
          } catch (error) {
           console.error('Error deleting data:',error);
           Alert.alert('Error', 'Data could not be deleted');

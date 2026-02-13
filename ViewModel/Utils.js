@@ -30,7 +30,7 @@ export function getSectionListData(data) {
 export function useUpdateEffect(effect, dependencies = []) {
   const isInitialMount = useRef(true);
 
-  useCallback(() => {
+  useEffect(() => {
     if (isInitialMount.current) {
       isInitialMount.current = false;
     } else {

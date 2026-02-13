@@ -59,17 +59,6 @@ export default function ProfileScreen({navigation}) {
         onChangeText={(text, rawText) => setPhone(rawText)}
         keyboardType="phone-pad"
       />
-       <Text>Password</Text>
-        <TextInput
-        style={styles.input}
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        textContentType="password"
-        placeholder="Enter your password"
-        autoCapitalize="none"
-        autoCorrect={false}  
-      />
 
       <Text style={styles.sectionTitle}>Email notifications</Text>
       {[
