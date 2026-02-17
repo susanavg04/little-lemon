@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import {
   Image,
   Pressable,
+  ScrollView,
   SectionList,
   StyleSheet,
   Text,
@@ -26,10 +27,19 @@ const images = {
  "Hummus": require('../../assets/images/Pasta.png'),
   "Greek" : require('../../assets/images/Greek salad.png'),
   "Grilled" : require('../../assets/images/Grilled fish.png'),
+  "Spinach Artichoke Dip" : require('../../assets/images/Spinach.png'),
+  "Fried Calamari Rings" : require('../../assets/images/Fried Calamari.png'),
+  "Fried Mushroom" : require('../../assets/images/Fried Mushrooms.png'),
+  "Caesar" : require('../../assets/images/Caesar.png'),
+  "Tuna Salad" : require('../../assets/images/Tuna salad.png'),
+  "Grilled Chicken Salad" : require('../../assets/images/Grilled Chicken Salad.png'),
+  "Water" : require('../../assets/images/Water.png'),
+  "Coke" : require('../../assets/images/Coke.png'),
+  "Beer" : require('../../assets/images/Beer.png'),
+  "Iced Tea" : require('../../assets/images/Icea Tea.png'),
 };
 
 export default function Home() {
-
   const navigation = useNavigation();
 
   const {
@@ -82,6 +92,7 @@ export default function Home() {
     </View>
     );
       return (
+       <ScrollView>
       <SafeAreaView style={styles.container}>
       <Header />
       {renderHeader()}
@@ -109,12 +120,15 @@ export default function Home() {
           
         )}
         renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.header}>{title}</Text>
+          <View style={styles.headerContainer}>
+            <Text style={styles.headerText}>{title}</Text>
+          </View>
         )}
         ItemSeparatorComponent={() => <View style={styles.separator} />}
       />
       
       </SafeAreaView>
+      </ScrollView> 
       ) 
     };
 const styles = StyleSheet.create({
@@ -128,7 +142,19 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 25,
   },
-  heroTitle: {
+   headerContainer:{
+    backgroundColor: '#F4CE14'
+
+  },
+  headerText: {
+    fontSize: 20,
+    color: '#Ffffff',
+    fontWeight: 'bold',
+    fontFamily: 'MarkaziText-Regular'
+
+  },
+
+   heroTitle: {
     fontSize: 45,
     color: '#F4CE14',
     fontWeight: 'bold',

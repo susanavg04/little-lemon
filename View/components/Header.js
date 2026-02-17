@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Image, Platform, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function Header({imagenUri, iniciales}) {
@@ -10,7 +10,7 @@ export default function Header({imagenUri, iniciales}) {
 
   return (
     <View style={[styles.wrapper, { paddingTop: insets.top + 5 }]}>
-    
+    <View style={styles.sideContainer} />
       <Image
         source={require('../../assets/images/logo.png')}
         style={styles.logo}
@@ -18,18 +18,17 @@ export default function Header({imagenUri, iniciales}) {
         accessible
         accessibilityLabel="Little Lemon"
       />
-      {<Pressable onPress={goTonboarding} style={styles.avatarButton}>
-        {imagenUri ? (
+       <View style={styles.sideContainer}>
+        <Pressable onPress={goTonboarding} style={styles.avatarButton}>
+          {imagenUri ? (
             <Image source={{ uri: imagenUri }} style={styles.avatar} />
-         ) : (
-      <View style={[styles.avatar, { backgroundColor: '#495E57', justifyContent: 'center', alignItems: 'center' }]}>
-        <Text style={{ color: '#fff', fontWeight: 'bold' }}>{iniciales}</Text>
-      </View>
-    )}
-    </Pressable>
-    }
-     
-  
+          ) : (
+            <View style={[styles.avatar, styles.avatarPlaceholder]}>
+              <Text style={styles.avatarText}>{iniciales}</Text>
+            </View>
+          )}
+        </Pressable>
+       </View>
     </View>
   );
 }
@@ -39,28 +38,39 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
     paddingHorizontal: 16,
     paddingBottom: 12,
     borderBottomWidth: StyleSheet.hairlineWidth,
     borderBottomColor: '#EDEFEE',
   },
   logo: {
-    height: 80,
-    width: '100%',
-    alignSelf: 'center',
-    resizeMode:"contain" 
+    height: 50,
+    width: 200,
+    flex: 1,  
   },
   avatarButton: {
-    position: 'absolute',
-    right: 16,
-    top: Platform.select({ ios: 8, android: 8 }),
-    bottom: 10,
+   justifyContent: 'center',
   },
+ 
   avatar: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 8,
     backgroundColor: '#CBD2D9'
+  },
+  sideContainer: {
+    width: 50, 
+    alignItems: 'flex-end',
+  },
+  avatarPlaceholder: {
+    backgroundColor: '#495E57',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  avatarText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 16,
   },
 });
