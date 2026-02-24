@@ -47,6 +47,31 @@ useEffect(() => {
   const handleDiscard = async () => {
     await deleteProfile(email);
   };
+
+  // Subir imagen al servidor
+  const uploadImage = async (uri) => {
+    const formData = new FormData();
+    formData.append('avatar', {
+      uri,
+      name: 'avatar.jpg',
+      type: 'image/jpeg',
+    });
+    try {
+      const response = await fetch('https://TU_API_URL/upload', {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const result = await response.json();
+      console.log('Imagen subida:', result);
+      return result;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+    }
+  };
+
   const seleccionarImagen = async () => {
     // Pedir permisos
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -65,8 +90,8 @@ useEffect(() => {
 
     if (!resultado.canceled) {
       setImagenUri(resultado.assets[0].uri);
+      await uploadImage(resultado.assets[0].uri); // Subir imagen tras seleccionar
     }
-
   };
 
   const [password, setPassword] = useState("");

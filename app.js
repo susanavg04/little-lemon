@@ -44,11 +44,15 @@ function App() {
 
    function HomeStackNavigator() {
     return (
-    <HomeStack.Navigator>
-      <HomeStack.Screen name="HomeMain" component={Home} options={{ headerShown: false }} />
-      <HomeStack.Screen name="DishDetail" component={Dishdetailscreen} />
-    </HomeStack.Navigator>
-      );
+      <HomeStack.Navigator>
+        <HomeStack.Screen name="HomeMain" component={Home} options={{ headerShown: false }} />
+        <HomeStack.Screen 
+          name="Dishdetailscreen" 
+          component={Dishdetailscreen} 
+          options={{ title: 'Menu' }}
+        />
+      </HomeStack.Navigator>
+    );
    }
 
 

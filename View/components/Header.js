@@ -9,7 +9,7 @@ export default function Header({imagenUri, iniciales}) {
   const goTonboarding = () => navigation.navigate('Onboarding');
 
   return (
-    <View style={[styles.wrapper, { paddingTop: insets.top + 5 }]}>
+    <View style={[styles.wrapper, { paddingTop: insets.top  }]}>
     <View style={styles.sideContainer} />
       <Image
         source={require('../../assets/images/logo.png')}
@@ -45,8 +45,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#EDEFEE',
   },
   logo: {
-    height: 50,
-    width: 200,
+    height: 80,
+    width: 220,
     flex: 1,  
   },
   avatarButton: {

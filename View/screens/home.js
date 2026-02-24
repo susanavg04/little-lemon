@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
+import { useRef } from 'react';
 import {
   Image,
   Pressable,
-  ScrollView,
   SectionList,
   StyleSheet,
   Text,
@@ -41,6 +41,7 @@ const images = {
 
 export default function Home() {
   const navigation = useNavigation();
+  const searchBarRef = useRef(null);
 
   const {
     data,
@@ -79,6 +80,11 @@ export default function Home() {
         iconColor="#495E57"
         inputStyle={{ color: '#495E57' }}
         elevation={0}
+         autoFocus={false}
+         onSubmitEditing={() => {
+      // Aquí puedes cerrar el teclado si quieres
+         searchBarRef.current?.blur();
+    }}
       />
        </View>
        <View style={styles.deliveryContainer}>
@@ -91,19 +97,24 @@ export default function Home() {
         </View>
     </View>
     );
-      return (
-       <ScrollView>
-      <SafeAreaView style={styles.container}>
+    const renderHeaderContent = () => (
+    <View>
       <Header />
-      {renderHeader()}
+      {renderHeader()} 
+    </View>
+  );
+      return (
+       
+      <SafeAreaView style={styles.container}>
       <SectionList
         style={styles.sectionList}
         sections={data}
         keyExtractor={(item) => item.id}
+        ListHeaderComponent={renderHeaderContent}
         renderItem={({ item }) => (
             <Pressable 
               style={styles.itemContainer}
-              onPress={() => navigation.navigate("Dishdetail", { dishId: item.id })}
+              onPress={() => navigation.navigate("Dishdetailscreen", { dishId: item.id })}
             >
              <View style={styles.itemTextContainer}>
                <Text style={styles.itemTitle}>{item.title}</Text>
@@ -128,7 +139,7 @@ export default function Home() {
       />
       
       </SafeAreaView>
-      </ScrollView> 
+      
       ) 
     };
 const styles = StyleSheet.create({

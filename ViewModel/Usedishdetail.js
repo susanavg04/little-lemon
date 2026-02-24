@@ -31,16 +31,23 @@ export default function Usedishdetailviewmodel(dishId) {
 
   const addToCart = async () => {
     const selectedOptions = options.filter(o => o.selected);
-        const item = {
-      ...dish,
+    if (!dish) {
+      alert("No dish loaded");
+      return;
+    }
+    // Nos aseguramos de que el item tenga id, title, price (como número), quantity y options
+    const item = {
+      id: dish.id, // id numérico de la tabla
+      title: dish.title,
+      price: parseFloat(dish.price),
       quantity,
       options: selectedOptions,
     };
-    try{
+    try {
       await addItemToCart(item);
       console.log("Item added to cart:", item);
       alert("✅ Item added to cart!");
-    }catch(error){
+    } catch (error) {
       console.error("Error adding item to cart:", error);
     }
   };
