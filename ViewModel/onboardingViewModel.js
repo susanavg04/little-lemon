@@ -1,8 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { guardarUsuario, loginUsuario } from "../Model/DataBase_AsyncStorage";
+import { AuthContext } from './AuthContext';
 
 export const useOnboardingViewModel = (onFinish) => {
+  const { login: authLogin } = useContext(AuthContext);
 
   const validateEmail = (email) => {
    const regex = /\S+@\S+\.\S+/;
@@ -43,8 +45,11 @@ export const useOnboardingViewModel = (onFinish) => {
    try{
     const success = await guardarUsuario({ firstname, email, password });
     setMensaje(success ? "Registered user ✅" : "Error registering ❌");
-    await onFinish();
-    navigation.navigate("MainTabs", { screen: "Profile" });
+    if (success) {
+      await authLogin({ firstname, email });
+      await onFinish();
+      navigation.navigate("MainTabs", { screen: "Profile" });
+    }
     } catch (error) {
     console.error("Error registering user:", error);
     setMensaje("Unexpected error ❌");
@@ -53,22 +58,21 @@ export const useOnboardingViewModel = (onFinish) => {
 
   const login = async () => {
     try{
-    const result = await loginUsuario(email, password);
-    if (result.success) {
-      setMensaje(`Bienvenido ${result.user.firstname} ✅`);
-      await onFinish();
-
-      setTimeout(() => {
-       navigation.replace('Home');
-       }, 1000);
-      
-    } else {
-      setMensaje(result.message);
+      const result = await loginUsuario(email, password);
+      if (result.success) {
+        setMensaje(`Bienvenido ${result.user.firstname} ✅`);
+        await authLogin({ firstname: result.user.firstname, email: result.user.email });
+        await onFinish();
+        setTimeout(() => {
+          navigation.replace('Home');
+        }, 1000);
+      } else {
+        setMensaje(result.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      setMensaje("An unexpected error occurred ❌");
     }
-  } catch (error) {
-    console.error("Login error:", error);
-    setMensaje("An unexpected error occurred ❌");
-  }
   };
   
   

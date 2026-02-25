@@ -80,11 +80,7 @@ export default function Home() {
         iconColor="#495E57"
         inputStyle={{ color: '#495E57' }}
         elevation={0}
-         autoFocus={false}
-         onSubmitEditing={() => {
-      // Aquí puedes cerrar el teclado si quieres
-         searchBarRef.current?.blur();
-    }}
+        autoFocus={false}
       />
        </View>
        <View style={styles.deliveryContainer}>

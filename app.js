@@ -5,13 +5,14 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useFonts } from 'expo-font';
 import { useEffect, useState } from 'react';
+import { AuthProvider } from './ViewModel/AuthContext';
 
 
 import Cartscreen from "./View/screens/Cartscreen";
 import Dishdetailscreen from "./View/screens/Dishdetailscreen";
 import Home from './View/screens/Home';
 import Onboarding from "./View/screens/Onboarding";
-import Profile from './View/screens/Profile';
+import ProfileScreen from './View/screens/Profile';
 import Splashscreen from './View/screens/Splashscreen';
 
 
@@ -80,7 +81,7 @@ function MainTabs() {
     >
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Cart" component={Cartscreen} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="Profile" component={ProfileScreen} />
     </Tab.Navigator>
   );
 }
@@ -107,24 +108,21 @@ function MainTabs() {
   }
    
   
-     return (
-    
-      <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }}
-        initialRouteName={state.isOnboardingCompleted ? "MainTabs" : "Onboarding"}>
-          <Stack.Screen name="Onboarding">
-           {props => (
-             <Onboarding {...props} onFinish={completeOnboarding} />
-           )}
-          </Stack.Screen>
-          <Stack.Screen name="MainTabs" component={MainTabs} />
-        </Stack.Navigator>
-
-      </NavigationContainer>
-   
-    
-   
-  );
+    return (
+      <AuthProvider>
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={{ headerShown: false }}
+            initialRouteName={state.isOnboardingCompleted ? "MainTabs" : "Onboarding"}>
+            <Stack.Screen name="Onboarding">
+              {props => (
+                <Onboarding {...props} onFinish={completeOnboarding} />
+              )}
+            </Stack.Screen>
+            <Stack.Screen name="MainTabs" component={MainTabs} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthProvider>
+    );
 
 }
 

@@ -6,7 +6,16 @@ export default function Header({imagenUri, iniciales}) {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
 
-  const goTonboarding = () => navigation.navigate('Onboarding');
+  const goTonboarding = () => {
+    const rootNavigation = navigation.getParent(); 
+  
+  if (rootNavigation) {
+    rootNavigation.navigate('Onboarding');
+  } else {
+    
+    navigation.navigate('Onboarding');
+  }
+  };
 
   return (
     <View style={[styles.wrapper, { paddingTop: insets.top  }]}>

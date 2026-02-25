@@ -1,11 +1,22 @@
 
+import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from "react-native-mask-text";
+import { AuthContext } from '../../ViewModel/AuthContext';
 import { useProfileViewModel } from "../../ViewModel/Vm_profile";
 import Header from '../components/Header';
 
 
 export default function ProfileScreen({navigation}) {
+  const { user } = useContext(AuthContext);
+  useEffect(() => {
+    if (!user) {
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'Onboarding' }],
+      });
+    }
+  }, [user, navigation]);
 
  const {
     firstname, setfirstname,
@@ -16,6 +27,7 @@ export default function ProfileScreen({navigation}) {
     notifications, handleToggle,
     handleSave, handleDiscard,
     seleccionarImagen,
+    logout,
   } = useProfileViewModel();  
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -76,7 +88,13 @@ export default function ProfileScreen({navigation}) {
         </View>
 
       ))}
-      <Pressable style={styles.logoutButton} onPress={() => navigation.navigate ('Home')}>
+      <Pressable style={styles.logoutButton} onPress={async () => {
+        await logout();
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Onboarding' }],
+        });
+      }}>
         <Text style={styles.logoutText}>Log out</Text>
       </Pressable>
 

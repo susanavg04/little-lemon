@@ -66,8 +66,24 @@ export const loginUsuario = async (email, password) => {
           console.error('Error deleting data:',error);
           Alert.alert('Error', 'Data could not be deleted');
         }
-      
-  
+  };
 
-};
-         
+    export const uploadImage = async (uri) => {
+       try {
+         // Guardar la URI de la imagen en el perfil del usuario
+         if (!email) throw new Error("No se puede guardar imagen sin email");
+         // Obtener perfil actual
+         const perfilActual = await cargarUsuario(email);
+         const nuevoPerfil = {
+           ...perfilActual,
+           imagenUri: uri,
+         };
+         await saveProfile(email, nuevoPerfil);
+         setImagenUri(uri);
+         console.log('Imagen guardada en AsyncStorage:', uri);
+         return uri;
+       } catch (error) {
+         console.error('Error guardando imagen:', error);
+       }
+      };
+    

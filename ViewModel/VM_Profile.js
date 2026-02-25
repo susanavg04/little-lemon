@@ -1,12 +1,15 @@
 import * as ImagePicker from "expo-image-picker";
-import { useEffect, useState } from "react";
-import { cargarUsuario, deleteProfile, saveProfile } from "../Model/DataBase_AsyncStorage";
+import { useContext, useEffect, useState } from "react";
+import { cargarUsuario, deleteProfile, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
+import { AuthContext } from './AuthContext';
 
 export const useProfileViewModel = () => {
+  const { user, logout } = useContext(AuthContext);
 
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+
+  const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState("");
   const [imagenUri, setImagenUri] = useState(null);
   const [notifications, setNotifications] = useState({
@@ -19,20 +22,20 @@ export const useProfileViewModel = () => {
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
 
 useEffect(() => {
-    const fetchUserData = async () => {
-        
-        if (email) { 
-            const userData = await cargarUsuario(email);
-
-            if (userData) {
-                
-                setfirstname(userData.firstname || "");
-
-            }
-        }
-    };
-
-    fetchUserData(); 
+  const fetchUserData = async () => {
+    if (email) { 
+      const userData = await cargarUsuario(email);
+      if (userData) {
+        setfirstname(userData.firstname || "");
+        setLastName(userData.lastName || "");
+        setPhone(userData.phone || "");
+        setImagenUri(userData.imagenUri || null);
+        setNotifications(userData.notifications || notifications);
+      }
+    }
+  };
+  fetchUserData(); 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [email]);
  
   const handleToggle = (key) => {
@@ -40,43 +43,32 @@ useEffect(() => {
   };
 
   const handleSave = async () => {
-    const perfil = { firstname, lastName, email, phone, imagenUri, notifications };
+    // Guardar todos los datos necesarios para login y perfil
+    const perfil = {
+      firstname,
+      lastName,
+      email,
+      phone,
+      imagenUri,
+      notifications,
+      password, // importante para login
+    };
     await saveProfile(email, perfil);
   };
 
   const handleDiscard = async () => {
     await deleteProfile(email);
   };
-
-  // Subir imagen al servidor
-  const uploadImage = async (uri) => {
-    const formData = new FormData();
-    formData.append('avatar', {
-      uri,
-      name: 'avatar.jpg',
-      type: 'image/jpeg',
-    });
-    try {
-      const response = await fetch('https://TU_API_URL/upload', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      const result = await response.json();
-      console.log('Imagen subida:', result);
-      return result;
-    } catch (error) {
-      console.error('Error uploading image:', error);
-    }
-  };
-
-  const seleccionarImagen = async () => {
+    const seleccionarImagen = async () => {
     // Pedir permisos
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       alert("Se requieren permisos para acceder a las imágenes.");
+
+  
+ 
+
+
       return;
     }
 
@@ -114,5 +106,6 @@ useEffect(() => {
     handleSave,
     handleDiscard,
     seleccionarImagen,
+    logout,
   };
 };

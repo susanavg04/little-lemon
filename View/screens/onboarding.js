@@ -83,21 +83,22 @@ export default function Onboarding ({ navigation, onFinish })  {
          )}
       </View>
       <View style= {styles.section3}>
-      <Button title="Crear Perfil" onPress= {async () => {
-       const success = await registrar(); 
-       if (success) onFinish(); 
-       navigation.reset({
-        index: 0,
-        routes: [{ name: "MainTabs" }],
+      <Button title="Crear Perfil" onPress={() => {
+        navigation.reset({
+          index: 0,
+          routes: [
+                {
+                  name: "MainTabs",
+                  params: { screen: "Profile" },
+                },
+              ],
         });
-       }} />
+      }} />
       <View style={{ height: 12 }} />
       <Button title="Login in" onPress= {async () => {
-       const success = await login(); 
-       if (success) onFinish();
        navigation.reset({
         index: 0,
-        routes: [{ name: "MainTabs" }],
+        routes: [{ name: "MainTabs", params: { screen: "Home" } }],
        });
        }} 
       />

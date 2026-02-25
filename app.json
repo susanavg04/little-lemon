@@ -3,6 +3,7 @@
     "name": "firtapplemon",
     "slug": "firtapplemon",
     "version": "1.0.0",
+    "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
     "scheme": "firtapplemon",
