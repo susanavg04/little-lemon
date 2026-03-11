@@ -76,8 +76,8 @@ export default function Dishdetailscreen({ route, navigation }) {
       <View style={styles.centeredRow}>
         <Button
           title="ADD TO CART"
-          onPress={() => {
-            addToCart();
+          onPress={async() => {
+            await addToCart();
             navigation.navigate("Cart");
           }}
         />

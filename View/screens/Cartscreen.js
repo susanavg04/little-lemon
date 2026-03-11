@@ -1,11 +1,13 @@
-import { useEffect, useState } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useCallback, useState } from "react";
 import { FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { getCartTotals, removeItemFromCart } from "../../Model/Cartservices";
 
 export default function Cartscreen() {
   const [cartData, setCartData] = useState({ cart: [], subtotal: 0, delivery: 0, service: 0, total: 0 });
 
-
+  useFocusEffect(
+   useCallback(() => {
   const loadCart = async () => {
     try {
     const data = await getCartTotals();
@@ -15,11 +17,9 @@ export default function Cartscreen() {
       console.error("Error loading cart:", error);
     }
   };
-
-  useEffect(() => {
     loadCart();
-  }, []);
-
+  }, [])
+  );
   return (
     <View style={styles.container}>
       <View style={styles.headerSection}>

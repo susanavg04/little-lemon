@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+
 const CART_KEY = "user_cart";
 
 // 🔹 Obtener carrito
@@ -26,7 +27,7 @@ async function saveCart(cart) {
 // 🔹 Agregar ítem
 export async function addItemToCart(item) {
 
-  if (!item || !item.id || !item.price || !item.quantity) {
+  if (!item || !item.id) {
     console.warn("Item inválido:", item);
     return;
   }
