@@ -1,10 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { AuthContext } from '../../ViewModel/AuthContext';
 
-export default function Header({imagenUri, iniciales}) {
+
+export default function Header() {
   const insets = useSafeAreaInsets();
   const navigation = useNavigation();
+  const { user } = useContext(AuthContext);
 
   const goTonboarding = () => {
     const rootNavigation = navigation.getParent(); 
@@ -29,13 +33,13 @@ export default function Header({imagenUri, iniciales}) {
       />
        <View style={styles.sideContainer}>
         <Pressable onPress={goTonboarding} style={styles.avatarButton}>
-          {imagenUri ? (
-            <Image source={{ uri: imagenUri }} style={styles.avatar} />
-          ) : (
-            <View style={[styles.avatar, styles.avatarPlaceholder]}>
-              <Text style={styles.avatarText}>{iniciales}</Text>
-            </View>
-          )}
+          {user?.imagenUri ? (
+          <Image source={{ uri: user.imagenUri }} style={styles.avatar} />
+        ) : (
+          <View style={[styles.avatar, styles.avatarPlaceholder]}>
+            <Text style={styles.avatarText}>{user?.iniciales || "?"}</Text>
+          </View>
+        )}
         </Pressable>
        </View>
     </View>

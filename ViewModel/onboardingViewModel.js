@@ -3,6 +3,7 @@ import { useContext, useState } from "react";
 import { guardarUsuario, loginUsuario } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
+
 export const useOnboardingViewModel = (onFinish) => {
   const { login: authLogin } = useContext(AuthContext);
 
@@ -21,6 +22,7 @@ export const useOnboardingViewModel = (onFinish) => {
   const [firstname, setfirstname] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState("");
 
   const isEmailValid = validateEmail(email);
@@ -42,29 +44,41 @@ export const useOnboardingViewModel = (onFinish) => {
     setMensaje("Password does not meet requirements ❌");
     return;
    }
-   try{
+   try {
+    setCargando(true);
     const success = await guardarUsuario({ firstname, email, password });
     setMensaje(success ? "Registered user ✅" : "Error registering ❌");
     if (success) {
       await authLogin({ firstname, email });
-      await onFinish();
-      navigation.navigate("MainTabs", { screen: "Profile" });
-    }
+      if (onFinish) await onFinish();
+      navigation.reset({
+          index: 0,
+          routes: [
+                {
+                  name: "MainTabs",
+                  params: { screen: "Profile" },
+                },
+              ],
+        });
+     }
     } catch (error) {
     console.error("Error registering user:", error);
     setMensaje("Unexpected error ❌");
-  }
+   } finally {
+     setCargando(false);
+   }
   };
 
-  const login = async () => {
-    try{
+   const login = async () => {
+    try {
+      setCargando(true);
       const result = await loginUsuario(email, password);
       if (result.success) {
         setMensaje(`Bienvenido ${result.user.firstname} ✅`);
-        await authLogin({ firstname: result.user.firstname, email: result.user.email });
-        await onFinish();
+        await authLogin(result.user);
+        if (onFinish) await onFinish();
         setTimeout(() => {
-          navigation.replace('Home');
+          navigation.replace("MainTabs", { screen: "Home" });
         }, 1000);
       } else {
         setMensaje(result.message);
@@ -72,8 +86,10 @@ export const useOnboardingViewModel = (onFinish) => {
     } catch (error) {
       console.error("Login error:", error);
       setMensaje("An unexpected error occurred ❌");
+    } finally {
+      setCargando(false);
     }
-  };
+    };
   
   
 
@@ -83,6 +99,7 @@ export const useOnboardingViewModel = (onFinish) => {
     email,
     password,
     mensaje,
+    cargando,
     setfirstname,
     setEmail,
     setPassword,
@@ -92,5 +109,4 @@ export const useOnboardingViewModel = (onFinish) => {
     isPasswordValid,
 
   };
-  
 }

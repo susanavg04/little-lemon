@@ -19,11 +19,7 @@ export const cargarUsuario = async (email) => {
     const data = await AsyncStorage.getItem(`user_${email}`);
     if (!data) return null; // si no existe
     const user = JSON.parse(data);
-    const { firstname:nombre, email: correo, password } = user;
-    if (nombre && correo && password) {
-      return { firstname: nombre, email: correo, password };
-    }
-    return null;
+    return user;
   } catch (e) {
     console.error("Error al cargar usuario ❌", e);
     return null;
@@ -47,15 +43,21 @@ export const loginUsuario = async (email, password) => {
 };
 
  export const saveProfile = async (email, perfil)=> {
-     
-      try {
-        if (!email) throw new Error("No se puede guardar perfil sin email");
-        await AsyncStorage.setItem(`user_${email}`,JSON.stringify(perfil));
-       } catch (error) {
-          console.error('Error saving profile:',error);
-          Alert.alert('Error', 'Profile could not be saved');
-        }
-    }   
+   try {
+    if (!email) throw new Error("No se puede guardar perfil sin email");
+    
+    const datosExistentes = await cargarUsuario(email) || {};
+
+    const perfilActualizado = { ...datosExistentes, ...perfil };
+
+    await AsyncStorage.setItem(`user_${email}`, JSON.stringify(perfilActualizado));
+    
+    console.log("Perfil actualizado correctamente ✅");
+  } catch (error) {
+    console.error('Error saving profile:', error);
+    Alert.alert('Error', 'Profile could not be saved');
+  }  
+    };   
   export const deleteProfile =  async(email) => {
        
         try {
@@ -68,18 +70,18 @@ export const loginUsuario = async (email, password) => {
         }
   };
 
-    export const uploadImage = async (uri) => {
+    export const uploadImage = async (uri, email) => {
        try {
-         // Guardar la URI de la imagen en el perfil del usuario
+         
          if (!email) throw new Error("No se puede guardar imagen sin email");
-         // Obtener perfil actual
+         
          const perfilActual = await cargarUsuario(email);
          const nuevoPerfil = {
            ...perfilActual,
            imagenUri: uri,
          };
          await saveProfile(email, nuevoPerfil);
-         setImagenUri(uri);
+         
          console.log('Imagen guardada en AsyncStorage:', uri);
          return uri;
        } catch (error) {

@@ -28,6 +28,7 @@ export default function Cartscreen() {
          <View style={styles.listContainer}></View>
          <FlatList
            data={cartData.cart}
+           extraData={cartData}
            keyExtractor={(item) => item.id.toString()}
            renderItem={({ item }) => (
              <View style={styles.cartItem}>
@@ -38,7 +39,7 @@ export default function Cartscreen() {
                    onPress={async () => { await removeItemFromCart(item.id); await loadCart(); }}
                    style={{ marginLeft: 10 }}
                  >
-                  <Text style={{ color: "red", fontSize: 12 }}>✕</Text>
+                  <Text style={{ color: "red", fontSize: 15 }}>✕</Text>
                  </TouchableOpacity>
            </View> 
         </View>

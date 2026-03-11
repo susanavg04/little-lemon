@@ -1,14 +1,14 @@
 import * as ImagePicker from "expo-image-picker";
 import { useContext, useEffect, useState } from "react";
-import { cargarUsuario, deleteProfile, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
+import { cargarUsuario, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
 export const useProfileViewModel = () => {
-  const { user, logout } = useContext(AuthContext);
+  const { user, logout: authLogout, setUser } = useContext(AuthContext);
 
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
-
+  const [password, setPassword] = useState("");
   const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState("");
   const [imagenUri, setImagenUri] = useState(null);
@@ -18,10 +18,12 @@ export const useProfileViewModel = () => {
     specialOffers: true,
     newsletter: true,
   });
+ 
 
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
 
 useEffect(() => {
+  
   const fetchUserData = async () => {
     if (email) { 
       const userData = await cargarUsuario(email);
@@ -31,11 +33,12 @@ useEffect(() => {
         setPhone(userData.phone || "");
         setImagenUri(userData.imagenUri || null);
         setNotifications(userData.notifications || notifications);
+        setPassword(userData.password || "");
       }
     }
   };
   fetchUserData(); 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  
 }, [email]);
  
   const handleToggle = (key) => {
@@ -43,7 +46,7 @@ useEffect(() => {
   };
 
   const handleSave = async () => {
-    // Guardar todos los datos necesarios para login y perfil
+    
     const perfil = {
       firstname,
       lastName,
@@ -51,42 +54,82 @@ useEffect(() => {
       phone,
       imagenUri,
       notifications,
-      password, // importante para login
+      password, 
     };
     await saveProfile(email, perfil);
+    Alert.alert("Success", "Changes saved successfully ✅");
+  };
+  const handleLogout = async () => {
+    
+    setfirstname("");
+    setLastName("");
+    setPassword("");
+    setEmail("");
+    setPhone("");
+    setImagenUri(null);
+    setNotifications({
+      orderStatuses: true,
+      passwordChanges: true,
+      specialOffers: true,
+      newsletter: true,
+    });
+
+    await authLogout();
   };
 
   const handleDiscard = async () => {
-    await deleteProfile(email);
+    if (email) {
+      const userData = await cargarUsuario(email);
+      if (userData) {
+        setfirstname(userData.firstname);
+        setLastName(userData.lastName);
+        setPhone(userData.phone);
+        setImagenUri(userData.imagenUri);
+        setNotifications(userData.notifications);
+        setPassword(userData.password);
+      }
+    } 
+
+   
   };
-    const seleccionarImagen = async () => {
-    // Pedir permisos
+  const seleccionarImagen = async () => {
+    
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       alert("Se requieren permisos para acceder a las imágenes.");
 
-  
- 
-
-
       return;
     }
 
-    // Abrir selector
+    try {
     const resultado = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
+      mediaTypes: ['images'],
       allowsEditing: true,
       aspect: [1, 1],
-      quality: 0.8,
+      quality: 0.5,
     });
-
-    if (!resultado.canceled) {
-      setImagenUri(resultado.assets[0].uri);
-      await uploadImage(resultado.assets[0].uri); // Subir imagen tras seleccionar
+    
+    if (!resultado.canceled && resultado.assets && resultado.assets.length > 0) {
+      const uriSeleccionada = resultado.assets[0].uri;
+      
+      setImagenUri(uriSeleccionada);
+      setUser((prev) => ({
+      ...prev,
+      imagenUri: uriSeleccionada,
+     }));
+      
+    
+      await uploadImage(uriSeleccionada, email); 
+      console.log("Imagen seleccionada con éxito:", uriSeleccionada);
     }
+   } catch (error) {
+    console.error("Error al abrir la galería:", error);
+    alert("Hubo un error al intentar abrir la galería.");
+   }
+  
+
   };
 
-  const [password, setPassword] = useState("");
 
   return {
     firstname,
@@ -106,6 +149,7 @@ useEffect(() => {
     handleSave,
     handleDiscard,
     seleccionarImagen,
-    logout,
+    handleLogout, 
+    logout: handleLogout,
   };
 };

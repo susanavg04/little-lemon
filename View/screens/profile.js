@@ -8,26 +8,28 @@ import Header from '../components/Header';
 
 
 export default function ProfileScreen({navigation}) {
-  const { user } = useContext(AuthContext);
+  const { user, loading } = useContext(AuthContext);
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       navigation.reset({
         index: 0,
         routes: [{ name: 'Onboarding' }],
       });
     }
-  }, [user, navigation]);
+  }, [user, loading, navigation]);
 
  const {
     firstname, setfirstname,
     lastName, setLastName,
     email, setEmail,
     phone, setPhone,
+    password, setPassword,
     imagenUri, iniciales,
     notifications, handleToggle,
     handleSave, handleDiscard,
     seleccionarImagen,
     logout,
+    
   } = useProfileViewModel();  
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -63,6 +65,14 @@ export default function ProfileScreen({navigation}) {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
+      <TextInput
+        style={styles.input}
+        placeholder="Password"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
        <MaskedTextInput
         mask="(999) 999-9999"
         placeholder="(123) 456-7890"
@@ -92,7 +102,7 @@ export default function ProfileScreen({navigation}) {
         await logout();
         navigation.reset({
           index: 0,
-          routes: [{ name: 'Onboarding' }],
+          routes: [{ name: 'Home' }],
         });
       }}>
         <Text style={styles.logoutText}>Log out</Text>

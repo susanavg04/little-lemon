@@ -70,6 +70,8 @@ function MainTabs() {
             iconName = focused ? 'person' : 'person-outline';
           } else if (route.name === 'Cart') {
             iconName = focused ? 'cart' : 'cart-outline';
+          } else if (route.name === 'Login') {
+            iconName = focused ? 'log-in' : 'log-in-outline';
           }
 
           // Retornamos el componente del icono
@@ -82,6 +84,7 @@ function MainTabs() {
       <Tab.Screen name="Home" component={HomeStackNavigator} />
       <Tab.Screen name="Cart" component={Cartscreen} />
       <Tab.Screen name="Profile" component={ProfileScreen} />
+      <Tab.Screen name="Login" component={Onboarding} />
     </Tab.Navigator>
   );
 }

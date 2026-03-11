@@ -11,6 +11,7 @@ export default function Onboarding ({ navigation, onFinish })  {
     email,
     password,
     mensaje,
+    cargando,
     setfirstname,
     setEmail,
     setPassword,
@@ -83,24 +84,17 @@ export default function Onboarding ({ navigation, onFinish })  {
          )}
       </View>
       <View style= {styles.section3}>
-      <Button title="Crear Perfil" onPress={() => {
-        navigation.reset({
-          index: 0,
-          routes: [
-                {
-                  name: "MainTabs",
-                  params: { screen: "Profile" },
-                },
-              ],
-        });
-      }} />
-      <View style={{ height: 12 }} />
-      <Button title="Login in" onPress= {async () => {
-       navigation.reset({
-        index: 0,
-        routes: [{ name: "MainTabs", params: { screen: "Home" } }],
-       });
-       }} 
+      <Button 
+        title={cargando ? "Registrando..." : "Crear Perfil"} 
+        onPress={registrar}
+        disabled={cargando} // El botón se pone gris automáticamente
+      />
+ 
+            <View style={{ height: 12 }} />
+      <Button 
+      title="Login" 
+      onPress={login}
+      disabled={cargando}
       />
       
 
