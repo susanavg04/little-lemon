@@ -5,10 +5,7 @@ import { getCartTotals, removeItemFromCart } from "../../Model/Cartservices";
 
 export default function Cartscreen() {
   const [cartData, setCartData] = useState({ cart: [], subtotal: 0, delivery: 0, service: 0, total: 0 });
-
-  useFocusEffect(
-   useCallback(() => {
-  const loadCart = async () => {
+   const loadCart = async () => {
     try {
     const data = await getCartTotals();
     setCartData(data);
@@ -17,9 +14,20 @@ export default function Cartscreen() {
       console.error("Error loading cart:", error);
     }
   };
+  useFocusEffect(
+   useCallback(() => {
+  
     loadCart();
   }, [])
   );
+  const handleDeleteItem = async (id) => {
+    try {
+      await removeItemFromCart(id);
+      await loadCart(); // Esto fuerza la actualización inmediata de la UI
+    } catch (error) {
+      console.error("Error deleting item:", error);
+    }
+  };
   return (
     <View style={styles.container}>
       <View style={styles.headerSection}>
@@ -36,7 +44,7 @@ export default function Cartscreen() {
                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                  <Text style={styles.itemPrice}>${(item.price * item.quantity).toFixed(2)}</Text>
                  <TouchableOpacity 
-                   onPress={async () => { await removeItemFromCart(item.id); await loadCart(); }}
+                   onPress={() => handleDeleteItem(item.id)}
                    style={{ marginLeft: 10 }}
                  >
                   <Text style={{ color: "red", fontSize: 15 }}>✕</Text>
