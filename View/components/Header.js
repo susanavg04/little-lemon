@@ -10,14 +10,14 @@ export default function Header() {
   const navigation = useNavigation();
   const { user } = useContext(AuthContext);
 
-  const goTonboarding = () => {
+  const goToProfile = () => {
     const rootNavigation = navigation.getParent(); 
   
   if (rootNavigation) {
-    rootNavigation.navigate('Onboarding');
+    rootNavigation.navigate('Profile');
   } else {
     
-    navigation.navigate('Onboarding');
+    navigation.navigate('Profile');
   }
   };
 
@@ -32,7 +32,7 @@ export default function Header() {
         accessibilityLabel="Little Lemon"
       />
        <View style={styles.sideContainer}>
-        <Pressable onPress={goTonboarding} style={styles.avatarButton}>
+        <Pressable onPress={goToProfile} style={styles.avatarButton}>
           {user?.imagenUri ? (
           <Image source={{ uri: user.imagenUri }} style={styles.avatar} />
         ) : (

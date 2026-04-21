@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import {
   Image,
   Pressable,
@@ -12,7 +12,6 @@ import { Searchbar } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useHomeViewModel } from '../../ViewModel/Utils';
 import Filters from '../components/Filter';
-import Header from '../components/Header';
 
 const sections = ['Appetizers', 'Salads', 'Beverages'];
 
@@ -45,7 +44,6 @@ export default function Home() {
 
   const {
     data,
-    sections: MENU_SECTIONS,
     searchBarText,
     handleSearchChange,
     filterSelections,
@@ -53,8 +51,8 @@ export default function Home() {
   } = useHomeViewModel();
   
  
-  
-    const renderHeader = () => (
+  const ListHeader = useMemo(() => {
+   return (
     <View>
        <View style={styles.heroSection}>
           <Text style={styles.heroTitle}>Little Lemon</Text>
@@ -93,12 +91,9 @@ export default function Home() {
         </View>
     </View>
     );
-    const renderHeaderContent = () => (
-    <View>
-      <Header />
-      {renderHeader()} 
-    </View>
-  );
+    }, [searchBarText, filterSelections]);
+    
+
       return (
        
       <SafeAreaView style={styles.container}>
@@ -106,7 +101,7 @@ export default function Home() {
         style={styles.sectionList}
         sections={data}
         keyExtractor={(item) => item.id}
-        ListHeaderComponent={renderHeaderContent}
+        ListHeaderComponent={ListHeader}
         renderItem={({ item }) => (
             <Pressable 
               style={styles.itemContainer}

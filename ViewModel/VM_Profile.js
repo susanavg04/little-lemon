@@ -1,11 +1,25 @@
 import * as ImagePicker from "expo-image-picker";
 import { useContext, useEffect, useState } from "react";
-import { cargarUsuario, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
+import { cargarUsuario, guardarUsuario, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
 export const useProfileViewModel = () => {
   const { user, logout: authLogout, setUser } = useContext(AuthContext);
 
+  
+  const validateEmail = (email) => {
+     const regex = /\S+@\S+\.\S+/;
+  return regex.test(email);
+  };
+  
+  const validatePassword = (password) => {
+    // ejemplo: mínimo 8 caracteres, al menos 1 mayúscula, 1 minúscula, 1 número y 1 caracter especial
+     const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  return regex.test(password);
+  };
+  
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password);
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +32,40 @@ export const useProfileViewModel = () => {
     specialOffers: true,
     newsletter: true,
   });
+   const [mensaje, setMensaje] = useState("");
+   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
  
 
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
+
+  const registrar = async () => {
+     if (!firstname || !email || !password || !lastName || !phone || !imagenUri) {
+      setMensaje("Please complete all fields ❌");
+      return;
+     }
+  
+     if (!isEmailValid) {
+      setMensaje("Invalid email format ❌");
+      return;
+     }
+  
+     if (!isPasswordValid) {
+      setMensaje("Password does not meet requirements ❌");
+      return;
+     }
+     try {
+      
+      const success = await guardarUsuario({ firstname, email, password, lastName, phone, imagenUri, notifications });
+      setMensaje(success ? "Registered user ✅" : "Error registering ❌");
+      if (success) {
+
+   
+       }
+      } catch (error) {
+      console.error("Error registering user:", error);
+      setMensaje("Unexpected error ❌");
+      }
+    };
 
 useEffect(() => {
   
@@ -56,12 +101,19 @@ useEffect(() => {
       notifications,
       password, 
     };
-    await saveProfile(email, perfil);
+    const result = await saveProfile(email, perfil);
+
+   if (result) {
     Alert.alert("Success", "Changes saved successfully ✅");
+  } else {
+    Alert.alert("Error", "Could not save changes ❌");
+  }
+   return result;
   };
-  const handleLogout = async () => {
-    
-    setfirstname("");
+
+
+  const handleDiscard = async () => {
+      setfirstname("");
     setLastName("");
     setPassword("");
     setEmail("");
@@ -72,25 +124,7 @@ useEffect(() => {
       passwordChanges: true,
       specialOffers: true,
       newsletter: true,
-    });
-
-    await authLogout();
-  };
-
-  const handleDiscard = async () => {
-    if (email) {
-      const userData = await cargarUsuario(email);
-      if (userData) {
-        setfirstname(userData.firstname);
-        setLastName(userData.lastName);
-        setPhone(userData.phone);
-        setImagenUri(userData.imagenUri);
-        setNotifications(userData.notifications);
-        setPassword(userData.password);
-      }
-    } 
-
-   
+    } )
   };
   const seleccionarImagen = async () => {
     
@@ -144,6 +178,7 @@ useEffect(() => {
     setPassword,
     imagenUri,
     iniciales,
+    registrar,
     notifications,
     handleToggle,
     handleSave,
@@ -151,5 +186,7 @@ useEffect(() => {
     seleccionarImagen,
     handleLogout, 
     logout: handleLogout,
+    isPasswordVisible,
+    setIsPasswordVisible,
   };
 };

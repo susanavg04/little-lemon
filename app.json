@@ -23,12 +23,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.susa_09.firtapplemon"
     },
     "web": {
       "bundler": "metro",
       "output": "single",
       "favicon": "./assets/images/logo.png"
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "7781b800-666f-4696-818e-326bfb50c2a5"
+      }
     }
   }
 }

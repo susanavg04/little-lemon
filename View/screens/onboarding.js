@@ -1,27 +1,26 @@
 
-import { Image, StyleSheet, Text, TextInput, View } from "react-native";
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useOnboardingViewModel } from "../../ViewModel/Onboardingviewmodel";
 import Button from "../components/Button";
-
 
 export default function Onboarding ({ navigation, onFinish })  {
 
   const {
-    firstname,
     email,
     password,
     mensaje,
     cargando,
-    setfirstname,
     setEmail,
     setPassword,
-    registrar,
     login,
+    logout,   
+    user,
     isEmailValid,
     isPasswordValid,
-
+    isPasswordVisible,
+    setIsPasswordVisible,
   } = useOnboardingViewModel(onFinish);
-
 
   return (
     <View style={styles.container}>
@@ -54,28 +53,30 @@ export default function Onboarding ({ navigation, onFinish })  {
         </Text>
       )}
 
-      <Text>Name</Text>
-      <TextInput
-        style={styles.input}
-        value={firstname}
-        onChangeText={setfirstname}
-        keyboardType="default"
-        textContentType="name"
-        placeholder={"First Name"}
-        autoCapitalize="none"
-        autoCorrect={false}
-      />
+      <View style={styles.passwordContainer}>
       <Text>Password</Text>
         <TextInput
-          style={styles.input}
+          style={styles.inputPassword}
           value={password}
           onChangeText={setPassword}
-          secureTextEntry
+          secureTextEntry={!isPasswordVisible}
           textContentType="password"
           placeholder="Enter your password"
           autoCapitalize="none"
           autoCorrect={false}  
         />
+        <TouchableOpacity 
+            style={styles.eyeIcon} 
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            <MaterialCommunityIcons 
+              name={isPasswordVisible ? "eye-off" : "eye"} 
+              size={22} 
+              color="#495E57" 
+            />
+          </TouchableOpacity>
+          </View>
+
          {!isPasswordValid && password.length > 0 && (
           <Text style={{ color: "red", fontSize: 14 }}>
             Password must have at least 8 characters, 
@@ -84,18 +85,31 @@ export default function Onboarding ({ navigation, onFinish })  {
          )}
       </View>
       <View style= {styles.section3}>
-      <Button 
-        title={cargando ? "Registrando..." : "Crear Perfil"} 
-        onPress={registrar}
-        disabled={cargando} // El botón se pone gris automáticamente
-      />
- 
-            <View style={{ height: 12 }} />
-      <Button 
-      title="Login" 
+       <Button 
+      title="Iniciar Sesión" 
       onPress={login}
       disabled={cargando}
       />
+ 
+      <View style={{ height: 12 }} />
+      <Pressable
+       onPress={() => {
+       if (user) {
+         logout(); 
+         navigation.replace("MainTabs", { screen: "Home" });
+         } else {
+           navigation.replace("MainTabs", { screen: "Profile" });
+           }
+        }}
+>
+          <Text style={[styles.link, { color: user ? "red" : "#007AFF" }]}>
+          {user ? "Close Session" : "Sign Up"}
+         </Text>
+        </Pressable>
+
+        <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
+         <Text style={styles.link}>Forgot my password</Text>
+        </Pressable>
       
 
       {mensaje ? <Text style={{ marginTop: 20 }}>{mensaje}</Text> : null}
@@ -152,6 +166,33 @@ const styles = StyleSheet.create({
     borderColor: "#EDEFEE",
     fontFamily: "Karla",
   },
+    link: {
+    color: 'white',
+    textDecorationLine: 'underline',
+    fontSize: 16,
+    marginVertical: 10,
+  },
+
+  passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: "#EDEFEE",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#EDEFEE",
+    marginVertical: 15,
+  },
+  inputPassword: {
+    flex: 1, // El input ocupa todo el espacio
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    color: '#495E57',
+    fontFamily: "Karla",
+  },
+  eyeIcon: {
+    paddingHorizontal: 10,
+}
 });
 
 

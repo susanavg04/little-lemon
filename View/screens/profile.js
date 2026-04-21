@@ -24,11 +24,12 @@ export default function ProfileScreen({navigation}) {
     email, setEmail,
     phone, setPhone,
     password, setPassword,
+    registrar,
     imagenUri, iniciales,
     notifications, handleToggle,
     handleSave, handleDiscard,
     seleccionarImagen,
-    logout,
+  
     
   } = useProfileViewModel();  
   return (
@@ -46,18 +47,21 @@ export default function ProfileScreen({navigation}) {
       </TouchableOpacity>
       <Text style={styles.title}>{`${firstname} ${lastName}`}</Text>
       <Text style={styles.sectionTitle}>Personal information</Text>
+      <Text>Firstname</Text>
       <TextInput
         style={styles.input}
         placeholder="Firstname"
         value={firstname}
         onChangeText={setfirstname}
       />
+      <Text>Last name</Text>
       <TextInput
         style={styles.input}
         placeholder="Last name"
         value={lastName}
         onChangeText={setLastName}
       />
+      <Text>Email</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -65,14 +69,8 @@ export default function ProfileScreen({navigation}) {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
 
+      <Text>Phone</Text>
        <MaskedTextInput
         mask="(999) 999-9999"
         placeholder="(123) 456-7890"
@@ -81,6 +79,29 @@ export default function ProfileScreen({navigation}) {
         onChangeText={(text, rawText) => setPhone(rawText)}
         keyboardType="phone-pad"
       />
+      <View style={styles.passwordContainer}>
+      <Text>Password</Text>
+        <TextInput
+          style={styles.inputPassword}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry={!isPasswordVisible}
+          textContentType="password"
+          placeholder="Enter your password"
+          autoCapitalize="none"
+          autoCorrect={false}  
+        />
+        <TouchableOpacity 
+            style={styles.eyeIcon} 
+            onPress={() => setIsPasswordVisible(!isPasswordVisible)}
+          >
+            <MaterialCommunityIcons 
+              name={isPasswordVisible ? "eye-off" : "eye"} 
+              size={22} 
+              color="#495E57" 
+            />
+          </TouchableOpacity>
+          </View>
 
       <Text style={styles.sectionTitle}>Email notifications</Text>
       {[
@@ -98,19 +119,19 @@ export default function ProfileScreen({navigation}) {
         </View>
 
       ))}
-      <Pressable style={styles.logoutButton} onPress={async () => {
-        await logout();
+      <Pressable style={styles.registrarButton} onPress={async () => {
+        await registrar();
         navigation.reset({
           index: 0,
           routes: [{ name: 'Home' }],
         });
       }}>
-        <Text style={styles.logoutText}>Log out</Text>
+        <Text style={styles.registrarText}>CREATE PROFILE</Text>
       </Pressable>
 
       <View style={styles.footerButtons}>
         <TouchableOpacity style={styles.discardButton} onPress={handleDiscard}>
-          <Text style={styles.discardText}>Discard changes</Text>
+          <Text style={styles.discardText}>Clean Data</Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveText}>Save changes</Text>
@@ -169,14 +190,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 10,
   },
-  logoutButton: {
+  registrarButton: {
     backgroundColor: '#fcd200',
     padding: 15,
     borderRadius: 6,
     marginTop: 20,
     alignItems: 'center',
   },
-  logoutText: {
+  registrarText: {
     fontWeight: 'bold',
     color: '#000',
   },
@@ -207,6 +228,27 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
   },
+
+    passwordContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: "#EDEFEE",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#EDEFEE",
+    marginVertical: 15,
+  },
+  inputPassword: {
+    flex: 1, // El input ocupa todo el espacio
+    height: 40,
+    paddingHorizontal: 10,
+    fontSize: 16,
+    color: '#495E57',
+    fontFamily: "Karla",
+  },
+  eyeIcon: {
+    paddingHorizontal: 10,
+  }
 });
 
 

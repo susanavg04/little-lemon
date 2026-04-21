@@ -50,7 +50,7 @@ export const loginUsuario = async (email, password) => {
 
     const perfilActualizado = { ...datosExistentes, ...perfil };
 
-    await AsyncStorage.setItem(`user_${email}`, JSON.stringify(perfilActualizado));
+    await AsyncStorage.mergeItem(`user_${email}`, JSON.stringify(perfilActualizado));
     
     console.log("Perfil actualizado correctamente ✅");
   } catch (error) {
@@ -87,5 +87,20 @@ export const loginUsuario = async (email, password) => {
        } catch (error) {
          console.error('Error guardando imagen:', error);
        }
+
       };
+
+  export const obtenerPasswordLocal = async (email) => {
+  try {
+    const usuario = await cargarUsuario(email);
+    if (usuario && usuario.password) {
+      return usuario.password;
+    }
+    return null;
+  } catch (e) {
+    console.error("Error al obtener password", e);
+    return null;
+  }
+};
+
     
