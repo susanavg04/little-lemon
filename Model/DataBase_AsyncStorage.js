@@ -1,6 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert } from "react-native";
-
 
   export const guardarUsuario = async (user) => {
     try {
@@ -13,7 +13,7 @@ import { Alert } from "react-native";
     };
   };
 
-  // Cargar usuario por email
+  
 export const cargarUsuario = async (email) => {
   try {
     const data = await AsyncStorage.getItem(`user_${email}`);
@@ -103,4 +103,49 @@ export const loginUsuario = async (email, password) => {
   }
 };
 
-    
+export const useUsuario = (email) => {
+  return useQuery({
+    queryKey: ['user', email],
+    queryFn: () => cargarUsuario(email),
+    enabled: !!email,
+  });
+};
+
+export const useLoginUsuario = () => {
+  return useMutation({
+    mutationFn: ({ email, password }) => loginUsuario(email, password),
+  });
+};
+
+export const useSaveProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ email, perfil }) => saveProfile(email, perfil),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries(['user', variables.email]);
+    },
+  });
+};
+
+export const useDeleteProfile = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (email) => deleteProfile(email),
+    onSuccess: (_, email) => {
+      queryClient.removeQueries(['user', email]);
+    },
+  });
+};
+
+export const useUploadImage = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ uri, email }) => uploadImage(uri, email),
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries(['user', variables.email]);
+    },
+  });
+};

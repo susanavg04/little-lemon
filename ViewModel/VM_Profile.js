@@ -1,6 +1,6 @@
 import * as ImagePicker from "expo-image-picker";
 import { useContext, useEffect, useState } from "react";
-import { cargarUsuario, guardarUsuario, saveProfile, uploadImage } from "../Model/DataBase_AsyncStorage";
+import { useSaveProfile, useUploadImage, useUsuario } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
 export const useProfileViewModel = () => {
@@ -17,13 +17,12 @@ export const useProfileViewModel = () => {
      const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
   return regex.test(password);
   };
-  
+  const [email, setEmail] = useState(user?.email || "");
   const isEmailValid = validateEmail(email);
   const isPasswordValid = validatePassword(password);
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
-  const [email, setEmail] = useState(user?.email || "");
   const [phone, setPhone] = useState("");
   const [imagenUri, setImagenUri] = useState(null);
   const [notifications, setNotifications] = useState({
@@ -34,6 +33,12 @@ export const useProfileViewModel = () => {
   });
    const [mensaje, setMensaje] = useState("");
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+   const { data: userData, isLoading } = useUsuario(email);
+   const saveProfileMutation = useSaveProfile();
+   const uploadImageMutation = useUploadImage();
+   const handleLogout = () => {
+   authLogout();
+   };
  
 
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
@@ -67,24 +72,17 @@ export const useProfileViewModel = () => {
       }
     };
 
-useEffect(() => {
-  
-  const fetchUserData = async () => {
-    if (email) { 
-      const userData = await cargarUsuario(email);
-      if (userData) {
-        setfirstname(userData.firstname || "");
-        setLastName(userData.lastName || "");
-        setPhone(userData.phone || "");
-        setImagenUri(userData.imagenUri || null);
-        setNotifications(userData.notifications || notifications);
-        setPassword(userData.password || "");
-      }
-    }
-  };
-  fetchUserData(); 
-  
-}, [email]);
+    useEffect(() => {
+  if (userData) {
+    setfirstname(userData.firstname || "");
+    setLastName(userData.lastName || "");
+    setPhone(userData.phone || "");
+    setImagenUri(userData.imagenUri || null);
+    setNotifications(userData.notifications || notifications);
+    setPassword(userData.password || "");
+  }
+}, [userData]);
+
  
   const handleToggle = (key) => {
     setNotifications({ ...notifications, [key]: !notifications[key] });
@@ -101,14 +99,17 @@ useEffect(() => {
       notifications,
       password, 
     };
-    const result = await saveProfile(email, perfil);
-
-   if (result) {
-    Alert.alert("Success", "Changes saved successfully ✅");
-  } else {
-    Alert.alert("Error", "Could not save changes ❌");
-  }
-   return result;
+    saveProfileMutation.mutate(
+    { email, perfil },
+    {
+           onSuccess: () => {
+        Alert.alert("Success", "Changes saved successfully ✅");
+      },
+      onError: () => {
+        Alert.alert("Error", "Could not save changes ❌");
+      },
+    }
+  );  
   };
 
 
@@ -151,18 +152,21 @@ useEffect(() => {
       ...prev,
       imagenUri: uriSeleccionada,
      }));
-      
     
-      await uploadImage(uriSeleccionada, email); 
-      console.log("Imagen seleccionada con éxito:", uriSeleccionada);
-    }
-   } catch (error) {
-    console.error("Error al abrir la galería:", error);
-    alert("Hubo un error al intentar abrir la galería.");
-   }
-  
-
-  };
+      
+     uploadImageMutation.mutate(
+     { uri: uriSeleccionada, email },
+     {
+       onSuccess: () => {
+        console.log("Imagen guardada en cache + storage ✅");
+       },
+      }
+    );
+  }
+    } catch (error) {
+    console.error("Error al seleccionar imagen:", error);
+  }
+ };
 
 
   return {
@@ -189,4 +193,4 @@ useEffect(() => {
     isPasswordVisible,
     setIsPasswordVisible,
   };
-};
+    }

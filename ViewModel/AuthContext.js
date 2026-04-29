@@ -8,15 +8,15 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Cargar usuario al iniciar la app
+    
     const loadUser = async () => {
       try {
-        const userData = await AsyncStorage.getItem('user');
-        if (userData) {
-          setUser(JSON.parse(userData));
+        const seccion = await AsyncStorage.getItem('current_user');
+        if (seccion) {
+          setUser(JSON.parse(seccion));
         }
       } catch (e) {
-        // Manejar error
+        console.error('Error loading user data:', e);
       } finally {
         setLoading(false);
       }
@@ -25,13 +25,22 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (userData) => {
+       try {
     setUser(userData);
-    await AsyncStorage.setItem('user', JSON.stringify(userData));
+    await AsyncStorage.setItem('current_user', JSON.stringify(userData));
+      } catch (e) {
+      console.error('Error en login ❌', e);
+    }
   };
 
   const logout = async () => {
-    setUser(null);
-    await AsyncStorage.removeItem('user');
+     try {
+      setUser(null);
+      await AsyncStorage.removeItem('current_user');
+    } catch (e) {
+      console.error('Error en logout ❌', e);
+    }
+
   };
 
   return (

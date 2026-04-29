@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from "react";
-import { loginUsuario } from "../Model/DataBase_AsyncStorage";
+import { useLoginUsuario } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
 
@@ -9,11 +9,9 @@ export const useOnboardingViewModel = (onFinish) => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cargando, setCargando] = useState(false);
   const [mensaje, setMensaje] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = validatePassword(password);
+
 
   const validateEmail = (email) => {
      const regex = /\S+@\S+\.\S+/;
@@ -28,6 +26,10 @@ export const useOnboardingViewModel = (onFinish) => {
 
  
   const navigation = useNavigation();
+    
+  const isEmailValid = validateEmail(email);
+  const isPasswordValid = validatePassword(password);
+  const loginMutation = useLoginUsuario();
 
   
 
@@ -46,12 +48,17 @@ export const useOnboardingViewModel = (onFinish) => {
       setMensaje("Password does not meet requirements ❌");
       return;
      }
-    try {
-      setCargando(true);
-      const result = await loginUsuario(email, password);
+     
+     loginMutation.mutate(
+      { email, password },
+      {
+      onSuccess: async (result) => {
       if (result.success) {
         setMensaje(`Bienvenido ${result.user.firstname} ✅`);
-        await authLogin(result.user);
+        await authLogin({
+         email: result.user.email,
+         firstname: result.user.firstname
+        });
         if (onFinish) await onFinish();
         setTimeout(() => {
           navigation.replace("MainTabs", { screen: "Home" });
@@ -59,13 +66,14 @@ export const useOnboardingViewModel = (onFinish) => {
       } else {
         setMensaje(result.message);
       }
-    } catch (error) {
-      console.error("Login error:", error);
-      setMensaje("An unexpected error occurred ❌");
-    } finally {
-      setCargando(false);
+    },
+          onError: () => {
+        setMensaje("An unexpected error occurred ❌");
+      },
     }
-    };
+  );
+};
+
   
   
 
@@ -75,10 +83,10 @@ export const useOnboardingViewModel = (onFinish) => {
     password,
     mensaje,
     cargando,
-    setfirstname,
     setEmail,
     setPassword,
     login,
+    cargando: loginMutation.isPending,
     logout,   
     user,
     isEmailValid,

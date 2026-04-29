@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useFonts } from 'expo-font';
 import { AuthProvider } from './ViewModel/AuthContext';
 
@@ -17,6 +18,7 @@ import ProfileScreen from './View/screens/Profile';
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
+const queryClient = new QueryClient();
 
 
 
@@ -76,6 +78,7 @@ function MainTabs() {
 
    
     return (
+      <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <NavigationContainer>
           <Stack.Navigator screenOptions={{ headerShown: false }}
@@ -86,6 +89,7 @@ function MainTabs() {
           </Stack.Navigator>
         </NavigationContainer>
       </AuthProvider>
+      </QueryClientProvider>
     );
 
 }
