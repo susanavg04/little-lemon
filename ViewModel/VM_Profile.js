@@ -1,6 +1,7 @@
 import * as ImagePicker from "expo-image-picker";
 import { useContext, useEffect, useState } from "react";
-import { useSaveProfile, useUploadImage, useUsuario } from "../Model/DataBase_AsyncStorage";
+import { Alert } from 'react-native';
+import { guardarUsuario, useSaveProfile, useUploadImage, useUsuario } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
 
 export const useProfileViewModel = () => {
@@ -18,8 +19,7 @@ export const useProfileViewModel = () => {
   return regex.test(password);
   };
   const [email, setEmail] = useState(user?.email || "");
-  const isEmailValid = validateEmail(email);
-  const isPasswordValid = validatePassword(password);
+
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -31,7 +31,6 @@ export const useProfileViewModel = () => {
     specialOffers: true,
     newsletter: true,
   });
-   const [mensaje, setMensaje] = useState("");
    const [isPasswordVisible, setIsPasswordVisible] = useState(false);
    const { data: userData, isLoading } = useUsuario(email);
    const saveProfileMutation = useSaveProfile();
@@ -39,36 +38,62 @@ export const useProfileViewModel = () => {
    const handleLogout = () => {
    authLogout();
    };
+   const isEmailValid = validateEmail(email);
+   const isPasswordValid = validatePassword(password);
+   const [errors, setErrors] = useState({});
  
 
   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
 
+  const validateForm = () => {
+ 
+    let newErrors = {};
+
+  if (!firstname) newErrors.firstname = "Firstname is required";
+  if (!lastName) newErrors.lastName = "Last name is required";
+  if (!email) newErrors.email = "Email is required";
+  else if (!isEmailValid) newErrors.email = "Invalid email";
+
+  if (!phone) newErrors.phone = "Phone is required";
+
+  if (!password) newErrors.password = "Password is required";
+  else if (!isPasswordValid)
+    newErrors.password =
+      "Min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char";
+
+  if (!imagenUri) newErrors.imagen = "Profile image is required";
+
+  setErrors(newErrors);
+
+  return Object.keys(newErrors).length === 0;
+};
+ 
+
   const registrar = async () => {
-     if (!firstname || !email || !password || !lastName || !phone || !imagenUri) {
-      setMensaje("Please complete all fields ❌");
-      return;
+      const isValid = validateForm();
+
+     if (!isValid) {
+    return false; 
      }
   
-     if (!isEmailValid) {
-      setMensaje("Invalid email format ❌");
-      return;
-     }
-  
-     if (!isPasswordValid) {
-      setMensaje("Password does not meet requirements ❌");
-      return;
-     }
      try {
       
       const success = await guardarUsuario({ firstname, email, password, lastName, phone, imagenUri, notifications });
-      setMensaje(success ? "Registered user ✅" : "Error registering ❌");
+     
       if (success) {
-
-   
+        Alert.alert(
+        "Éxito",
+        "PERFIL GUARDADO EXITOSAMENTE ✅");
+        return true;
+       } else {
+        Alert.alert("Error", "No se pudo guardar ❌");
+        return false;
        }
+       
       } catch (error) {
-      console.error("Error registering user:", error);
-      setMensaje("Unexpected error ❌");
+       console.error("Error registering user:", error);
+       Alert.alert("Error", "Unexpected error ❌");
+       return false;
       }
     };
 
@@ -78,7 +103,12 @@ export const useProfileViewModel = () => {
     setLastName(userData.lastName || "");
     setPhone(userData.phone || "");
     setImagenUri(userData.imagenUri || null);
-    setNotifications(userData.notifications || notifications);
+    setNotifications(userData.notifications || {
+     orderStatuses: true,
+     passwordChanges: true,
+     specialOffers: true,
+      newsletter: true,
+     });
     setPassword(userData.password || "");
   }
 }, [userData]);
@@ -192,5 +222,8 @@ export const useProfileViewModel = () => {
     logout: handleLogout,
     isPasswordVisible,
     setIsPasswordVisible,
+    isEmailValid,
+    isPasswordValid,
+    errors,
   };
     }

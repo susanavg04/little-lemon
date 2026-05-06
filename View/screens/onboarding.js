@@ -1,26 +1,36 @@
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useContext } from "react";
 import { Image, Pressable, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { AuthContext } from '../../ViewModel/AuthContext';
 import { useOnboardingViewModel } from "../../ViewModel/Onboardingviewmodel";
+import { useProfileViewModel } from "../../ViewModel/Vm_profile";
 import Button from "../components/Button";
 
-export default function Onboarding ({ navigation, onFinish })  {
 
+export default function Onboarding ({ navigation, onFinish })  {
+  
+  const { user, login: authLogin, logout } = useContext(AuthContext);
   const {
     email,
     password,
-    mensaje,
     cargando,
     setEmail,
     setPassword,
-    login,
-    logout,   
-    user,
     isEmailValid,
     isPasswordValid,
     isPasswordVisible,
     setIsPasswordVisible,
+    iniciarseccion 
   } = useOnboardingViewModel(onFinish);
+  const { handleDiscard } = useProfileViewModel();
+  
+  const handleLogout = () => {
+  logout();
+  setEmail("");
+  setPassword("");
+  handleDiscard();
+};
 
   return (
     <View style={styles.container}>
@@ -54,13 +64,12 @@ export default function Onboarding ({ navigation, onFinish })  {
       )}
 
       <View style={styles.passwordContainer}>
-      <Text>Password</Text>
+      
         <TextInput
           style={styles.inputPassword}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!isPasswordVisible}
-          textContentType="password"
           placeholder="Enter your password"
           autoCapitalize="none"
           autoCorrect={false}  
@@ -86,33 +95,21 @@ export default function Onboarding ({ navigation, onFinish })  {
       </View>
       <View style= {styles.section3}>
        <Button 
-      title="Iniciar Sesión" 
-      onPress={login}
-      disabled={cargando}
-      />
- 
+      title={user ? "Close Session" : "Sign Up"}
+        onPress={() => {
+         if (user) {
+         handleLogout();
+         } else {
+         iniciarseccion();
+         }
+        }}></Button>
       <View style={{ height: 12 }} />
       <Pressable
-       onPress={() => {
-       if (user) {
-         logout(); 
-         navigation.replace("MainTabs", { screen: "Home" });
-         } else {
-           navigation.replace("MainTabs", { screen: "Profile" });
-           }
-        }}
->
-          <Text style={[styles.link, { color: user ? "red" : "#007AFF" }]}>
-          {user ? "Close Session" : "Sign Up"}
-         </Text>
-        </Pressable>
-
-        <Pressable onPress={() => navigation.navigate("ForgotPassword")}>
-         <Text style={styles.link}>Forgot my password</Text>
-        </Pressable>
-      
-
-      {mensaje ? <Text style={{ marginTop: 20 }}>{mensaje}</Text> : null}
+      onPress={() => navigation.navigate("ForgotPassword")}
+      disabled={!email || !isEmailValid}
+      >
+        <Text style={[styles.link, { color: user ? "red" : "#007AFF" }]}>Forgot my password</Text>
+      </Pressable>
     </View>
     </View>
   );
@@ -171,7 +168,8 @@ const styles = StyleSheet.create({
     textDecorationLine: 'underline',
     fontSize: 16,
     marginVertical: 10,
-  },
+    textAlign: "center"
+    },
 
   passwordContainer: {
     flexDirection: 'row',

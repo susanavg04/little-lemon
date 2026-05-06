@@ -1,4 +1,5 @@
 
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useContext, useEffect } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from "react-native-mask-text";
@@ -9,6 +10,7 @@ import Header from '../components/Header';
 
 export default function ProfileScreen({navigation}) {
   const { user, loading } = useContext(AuthContext);
+
   useEffect(() => {
     if (!loading && !user) {
       navigation.reset({
@@ -29,7 +31,11 @@ export default function ProfileScreen({navigation}) {
     notifications, handleToggle,
     handleSave, handleDiscard,
     seleccionarImagen,
-  
+     isPasswordVisible,
+    setIsPasswordVisible,
+    isEmailValid,
+    isPasswordValid,
+    errors,
     
   } = useProfileViewModel();  
   return (
@@ -45,6 +51,9 @@ export default function ProfileScreen({navigation}) {
           </View>
         )}
       </TouchableOpacity>
+      {errors.imagen && (
+       <Text style={styles.errorText}>{errors.imagen}</Text>
+       )}
       <Text style={styles.title}>{`${firstname} ${lastName}`}</Text>
       <Text style={styles.sectionTitle}>Personal information</Text>
       <Text>Firstname</Text>
@@ -54,6 +63,9 @@ export default function ProfileScreen({navigation}) {
         value={firstname}
         onChangeText={setfirstname}
       />
+      {errors.firstname && (
+      <Text style={styles.errorText}>{errors.firstname}</Text>
+       )}
       <Text>Last name</Text>
       <TextInput
         style={styles.input}
@@ -61,6 +73,9 @@ export default function ProfileScreen({navigation}) {
         value={lastName}
         onChangeText={setLastName}
       />
+      {errors.lastName && (
+      <Text style={styles.errorText}>{errors.lastName}</Text>
+       )}
       <Text>Email</Text>
       <TextInput
         style={styles.input}
@@ -69,6 +84,9 @@ export default function ProfileScreen({navigation}) {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
+      {errors.email && (
+      <Text style={styles.errorText}>{errors.email}</Text>
+      )}
 
       <Text>Phone</Text>
        <MaskedTextInput
@@ -79,14 +97,16 @@ export default function ProfileScreen({navigation}) {
         onChangeText={(text, rawText) => setPhone(rawText)}
         keyboardType="phone-pad"
       />
-      <View style={styles.passwordContainer}>
+      {errors.phone && (
+      <Text style={styles.errorText}>{errors.phone}</Text>
+       )}
       <Text>Password</Text>
+      <View style={styles.passwordContainer}>
         <TextInput
           style={styles.inputPassword}
           value={password}
           onChangeText={setPassword}
           secureTextEntry={!isPasswordVisible}
-          textContentType="password"
           placeholder="Enter your password"
           autoCapitalize="none"
           autoCorrect={false}  
@@ -101,7 +121,18 @@ export default function ProfileScreen({navigation}) {
               color="#495E57" 
             />
           </TouchableOpacity>
-          </View>
+          
+        </View>
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+          )}
+          
+          {!isPasswordValid && password.length > 0 && (
+          <Text style={{ color: "red", fontSize: 14 }}>
+            Password must have at least 8 characters, 
+            1 uppercase, 1 lowercase, 1 number and 1 special character.
+          </Text>
+               )}
 
       <Text style={styles.sectionTitle}>Email notifications</Text>
       {[
@@ -121,10 +152,6 @@ export default function ProfileScreen({navigation}) {
       ))}
       <Pressable style={styles.registrarButton} onPress={async () => {
         await registrar();
-        navigation.reset({
-          index: 0,
-          routes: [{ name: 'Home' }],
-        });
       }}>
         <Text style={styles.registrarText}>CREATE PROFILE</Text>
       </Pressable>
@@ -248,7 +275,12 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     paddingHorizontal: 10,
-  }
+  },
+  errorText: {
+  color: "red",
+  fontSize: 12,
+  marginBottom: 8,
+  },
 });
 
 

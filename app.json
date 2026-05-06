@@ -8,24 +8,37 @@
     "icon": "./assets/images/logo.png",
     "scheme": "firtapplemon",
     "userInterfaceStyle": "automatic",
+    "updates": {
+      "enabled": false
+    },
     "plugins": [
       [
         "expo-build-properties",
         {}
       ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Allow firtapplemon to access your photos",
+          "cameraPermission": false
+        }
+      ],
       "expo-font",
       "expo-router"
     ],
+ 
     "ios": {
       "supportsTablet": true
     },
-    "android": {
+  "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.susa_09.firtapplemon"
+      "package": "com.susa_09.firtapplemon",
+      "permissions": []
     },
+    
     "web": {
       "bundler": "metro",
       "output": "single",

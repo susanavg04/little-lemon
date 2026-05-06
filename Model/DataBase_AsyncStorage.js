@@ -29,16 +29,19 @@ export const cargarUsuario = async (email) => {
 export const loginUsuario = async (email, password) => {
   try {
     const user = await cargarUsuario(email);
-    if (!user) return { success: false, message: "Usuario no encontrado" };
+    if (!user) return {         
+        success: false, 
+        code: "USER_NOT_FOUND",
+        message: "Usuario no encontrado" };
 
     if (user.password === password) {
       return { success: true, user };
     } else {
-      return { success: false, message: "Contraseña incorrecta" };
+      return { success: false, code: "INCORRECT_PASSWORD", message: "Contraseña incorrecta" };
     }
   } catch (e) {
     console.error("Error en login ❌", e);
-    return { success: false, message: "Error interno" };
+    return { success: false, code: "INTERNAL_ERROR", message: "Error interno" };
   }
 };
 

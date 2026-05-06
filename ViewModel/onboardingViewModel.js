@@ -1,7 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import { useContext, useState } from "react";
+import { Alert } from 'react-native';
 import { useLoginUsuario } from "../Model/DataBase_AsyncStorage";
 import { AuthContext } from './AuthContext';
+
 
 
 export const useOnboardingViewModel = (onFinish) => {
@@ -9,7 +11,6 @@ export const useOnboardingViewModel = (onFinish) => {
   
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [mensaje, setMensaje] = useState("");
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
 
@@ -33,19 +34,21 @@ export const useOnboardingViewModel = (onFinish) => {
 
   
 
-   const login = async () => {
+   const iniciarseccion ={
+    
+   } = async () => {
      if ( !email || !password) {
-      setMensaje("Please complete all fields ❌");
+      Alert.alert("Please complete all fields ❌");
       return;
      }
   
      if (!isEmailValid) {
-      setMensaje("Invalid email format ❌");
+      Alert.alert("Invalid email format ❌");
       return;
      }
   
      if (!isPasswordValid) {
-      setMensaje("Password does not meet requirements ❌");
+      Alert.alert("Password does not meet requirements ❌");
       return;
      }
      
@@ -54,41 +57,40 @@ export const useOnboardingViewModel = (onFinish) => {
       {
       onSuccess: async (result) => {
       if (result.success) {
-        setMensaje(`Bienvenido ${result.user.firstname} ✅`);
+        Alert.alert(`Bienvenido ${result.user.firstname} ✅`);
         await authLogin({
          email: result.user.email,
          firstname: result.user.firstname
         });
-        if (onFinish) await onFinish();
-        setTimeout(() => {
-          navigation.replace("MainTabs", { screen: "Home" });
-        }, 1000);
-      } else {
-        setMensaje(result.message);
-      }
-    },
-          onError: () => {
-        setMensaje("An unexpected error occurred ❌");
-      },
-    }
-  );
-};
+        onFinish && onFinish();
+         } else {
+           if (result.code === "USER_NOT_FOUND") {
+            Alert.alert(
+            "User not found ❌",
+           "This email is not registered. Please sign up first."
+            );
 
-  
-  
+           navigation.replace("MainTabs", { screen: "Profile" });
+          } else {
+          Alert.alert(result.message);
+         }
+       }
+      },
+         onError: () => {
+         Alert.alert("An unexpected error occurred ❌");
+         },
+      }
+    );
+   } 
 
 
   return {
     email,
     password,
-    mensaje,
-    cargando,
     setEmail,
     setPassword,
-    login,
     cargando: loginMutation.isPending,
-    logout,   
-    user,
+    iniciarseccion ,
     isEmailValid,
     isPasswordValid,
     isPasswordVisible,
