@@ -2,7 +2,7 @@
   "expo": {
     "name": "firtapplemon",
     "slug": "firtapplemon",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "jsEngine": "hermes",
     "orientation": "portrait",
     "icon": "./assets/images/logo.png",
@@ -14,31 +14,35 @@
     "plugins": [
       [
         "expo-build-properties",
-        {}
+        {
+          "android": {
+            "enableProguardInReleaseBuilds": true,
+            "extraPermissions": []
+          }
+        }
       ],
       [
         "expo-image-picker",
         {
           "photosPermission": "Allow firtapplemon to access your photos",
-          "cameraPermission": false
+          "cameraPermission": false,
+          "microphonePermission": false
         }
       ],
       "expo-font",
       "expo-router"
     ],
- 
     "ios": {
       "supportsTablet": true
     },
-  "android": {
+    "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
         "backgroundColor": "#ffffff"
       },
       "package": "com.susa_09.firtapplemon",
-      "permissions": []
+      "permissions": ["INTERNET","READ_EXTERNAL_STORAGE"]
     },
-    
     "web": {
       "bundler": "metro",
       "output": "single",
