@@ -1,50 +1,178 @@
-# Welcome to little Lemon
+🍋 **Little Lemon App**
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Mobile restaurant application built with React Native and Expo as part of the Meta Front-End / Back-End Developer Professional Certificate on Coursera.
 
-## Get started
 
-1. Install dependencies
+**Project Overview**
 
-   ```bash
-   npm install
-   ```
+Little Lemon is a modern Mediterranean restaurant mobile application designed to simulate a complete digital restaurant experience.
+Little Lemon is a mobile restaurant application developed with React Native and Expo as part of the Meta Front-End / Back-End Developer Professional Certificate.
 
-2. Start the app
+The application simulates a complete digital restaurant experience where users can:
 
-   ```bash
-   npx expo start
-   ```
+-Browse the restaurant menu
+-Search and filter dishes
+-Customize meal options
+-Add products to the cart
+-Manage user profiles
+-Log in and log out
+-Store local user data using AsyncStorage
+-Store menu data using SQLite
+-Navigate through multiple interactive screens
 
-In the output, you'll find options to open the app in a
+This project was developed for educational purposes to practice mobile development concepts using React Native.
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+**Project Goals**
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+The main objectives of this project are:
 
-## Get a fresh project
+1.Apply React Native fundamentals in a real-world mobile application
+2.Implement screen navigation using React Navigation
+3.Manage local persistence with AsyncStorage
+4.Use SQLite to store Menu Items and connect SQLite to a state
+5.Use ContextAPI for login and Create form validation for users
+6.Organize code using a scalable architecture
+7.Build reusable UI components
+8.Practice state management and user authentication flow
+9.Create a clean and user-friendly restaurant experience
+10.Creating a form for storing customer data.
+11.Creation of search filters and banners
 
-When you're ready, run:
+**Technologies Used**
 
-```bash
-npm run reset-project
-```
+1.React Native:	Mobile application framework
+2.Expo:	Development environment
+3.React Navigation:	Navigation between screens
+4.AsyncStorage:	Local data persistence
+5.React Query:	Data and state management
+6.JavaScript (ES6+):	Programming language
+7.Expo Vector Icons:	Icons library
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+**Application Structure**
 
-## Learn more
+little-lemon/
+├── Assets/
+│   ├── Fonts
+│   └── Images
+│
+├── Model/
+│   ├── Cartservices.js
+│   ├── DataBase_AsyncStorage.js
+│   └── DataBase_SQLite.js
+│
+├── View/
+│   │
+│   ├── components/
+│   │   ├── Button.js
+│   │   ├── Filter.js
+│   │   ├── Header.js
+│   │   ├── Optionselector.js
+│   │   └── Quantityselector.js
+│   │
+│   ├── screens/
+│   │   ├── Home.js
+│   │   ├── Cartscreen.js
+│   │   ├── Dishdetailscreen.js
+│   │   ├── ForgotPasswordScreen.js
+│   │   ├── Onboarding.js
+│   │   └── Profile.js
+│   │
+│   └── ViewModel/
+│       ├── AuthContext.js
+│       ├── Onboardingviewmodel.js
+│       ├── Usedishdetails.js
+│       ├── Utils.js
+│       └── Vm_profile.js
+│
+├── App.js
+├── app.json
+├── eas.json
+├── package-lock-json
+├── package.json
+└── README.md
 
-To learn more about developing your project with Expo, look at the following resources:
+**Architecture Overview**
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+The project follows a structure inspired by the MVVM pattern:
+| Layer     | Responsibility                         |
+| --------- | -------------------------------------- |
+| Model     | Data management, storage, and services |
+| View      | UI components and application screens  |
+| ViewModel | Business logic and state handling      |
 
-## Join the community
+**ScreenShot**
 
-Join our community of developers creating universal apps.
+<p align="center">
+  <img src="./assets/images/Proceso de Perfil.Png" width="250" alt="Proceso de Perfil" />
+  <img src="./assets/images/Proceso de Log in.Png" width="250" alt="Proceso de Log in" />
+  <img src="./assets/images/Proceso de compra.Png" width="250" alt="Proceso de Compra" />
+</p>
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+**User Interface Design**
+
+Design Overview
+
+The Little Lemon Restaurant application follows a clean, modern, and user-friendly interface designed to provide a smooth food ordering experience. The visual design is based on the official Little Lemon branding, using a consistent color palette, intuitive navigation, and responsive layouts.
+
+The application was developed using React Native and follows a mobile-first design approach.
+
+Design Principles
+
+The user interface was built according to the following principles:
+
+-Simplicity and ease of use.
+-Consistent visual identity across all screens.
+-Fast access to menu categories and dishes.
+-Clear navigation through bottom tab navigation.
+-Readable typography and accessible color contrast.
+-Minimalistic layouts focused on restaurant content.
+
+Color Palette
+
+The application uses the official Little Lemon brand colors.
+
+| Color      | Hex Code | Purpose                                         |
+| ---------- | -------- | ---------------------------------------------   |
+| Dark Green | #495E57  | Headers, category buttons, backgrounds        |
+| Yellow     | #F4CE14  | Primary actions, highlights, restaurant title |
+| White      | #FFFFFF  | Main content backgrounds                      |
+| Light Gray | #EDEFEE  | Secondary backgrounds                         |
+| Black      | #000000  | Text and totals                               |
+
+Typography
+
+Custom fonts are included in the application through the assets/fonts directory.
+
+Fonts Used
+
+1. Markazi Text
+Used for restaurant titles and large headings.
+
+2. Karla
+Used for body text, buttons, descriptions, and labels.
+
+3. Space Mono
+Used in specific interface elements when needed.
+
+Navigation Design
+The application uses Bottom Tab Navigation to provide quick access to the main sections.
+
+Navigation Tabs
+This navigation structure ensures that users can move between the main features with a single tap.
+
+| Screen  | Description                                    |
+| ------- | ---------------------------------------------- |
+| Home    | Displays restaurant information and menu items |
+| Cart    | Shows selected dishes and order summary        |
+| Profile | Displays and updates user information          |
+| Login   | Provides user authentication functionality     |
+
+
+
+**Author**
+
+Developed by Susana Valencia Gallego
+As part of the Meta Professional Certificate Program on Coursera.
+
+GitHub Repository:
+https://github.com/susanavg04/little-lemon?utm_source=chatgpt.com

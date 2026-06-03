@@ -1,8 +1,11 @@
 import * as SQLite from 'expo-sqlite';
+
+
 const API_URL =
   'https://raw.githubusercontent.com/Meta-Mobile-Developer-PC/Working-With-Data-API/main/menu-items-by-category.json';
 const db = SQLite.openDatabaseSync('little_lemon.db');
 
+// Functions for managing the SQLite database.
 
 export async function createTable() {
   return db.execAsync(
@@ -10,14 +13,13 @@ export async function createTable() {
         );
       }
 
-
+// Get all menu items from the database.
 export async function getMenuItems() {
   const rows = await db.getAllAsync('SELECT * FROM menuitems');
   return rows;
 };
 
-
-
+// Save menu items to the database, ignoring duplicates based on uuid.
 export async function saveMenuItems(menuItems) {
   for (const item of menuItems) {
       try{
@@ -31,22 +33,22 @@ export async function saveMenuItems(menuItems) {
     }
   }
 };
-
+// Filter menu items by search query and active categories.
 export async function filterByQueryAndCategories(query, activeCategories) {
   try {
-    // 1. Manejo de categorías dinámicas de forma segura
+    // Secure management of dynamic categories
     const placeholders = activeCategories.map(() => 'category = ?').join(' OR ');
     
     let sql = `SELECT * FROM menuitems WHERE (${placeholders})`;
     let params = [...activeCategories];
 
-    // 2. Si hay búsqueda por texto, añadimos a los parámetros
-    if (query) {
+    // If text search is available, we add the following parameters and modify the SQL query to include the text search condition
+     if (query) {
       sql = `SELECT * FROM menuitems WHERE title LIKE ? AND (${placeholders})`;
       params = [`%${query}%`, ...activeCategories];
     }
 
-    // 3. Ejecución directa con Promesa (sin tx.executeSql)
+    // Direct execution using Promise
     const allRows = await db.getAllAsync(sql, params);
     return allRows;
   } catch (error) {

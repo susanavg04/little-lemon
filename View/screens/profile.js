@@ -1,6 +1,6 @@
 
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import { Image, Pressable, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { MaskedTextInput } from "react-native-mask-text";
 import { AuthContext } from '../../ViewModel/AuthContext';
@@ -8,19 +8,10 @@ import { useProfileViewModel } from "../../ViewModel/Vm_profile";
 import Header from '../components/Header';
 
 
-export default function ProfileScreen({navigation}) {
+export default function ProfileScreen() {
   const { user, loading } = useContext(AuthContext);
 
-  useEffect(() => {
-    if (!loading && !user) {
-      navigation.reset({
-        index: 0,
-        routes: [{ name: 'Onboarding' }],
-      });
-    }
-  }, [user, loading, navigation]);
-
- const {
+  const {
     firstname, setfirstname,
     lastName, setLastName,
     email, setEmail,
@@ -38,6 +29,7 @@ export default function ProfileScreen({navigation}) {
     errors,
     
   } = useProfileViewModel();  
+   // Form for creating a new user profile 
   return (
     <ScrollView contentContainerStyle={styles.container}>
     <View style={styles.container}>
@@ -150,6 +142,7 @@ export default function ProfileScreen({navigation}) {
         </View>
 
       ))}
+      // Button to create a new user profile with the provided information
       <Pressable style={styles.registrarButton} onPress={async () => {
         await registrar();
       }}>
@@ -157,9 +150,11 @@ export default function ProfileScreen({navigation}) {
       </Pressable>
 
       <View style={styles.footerButtons}>
+        // Buttons to  discard them
         <TouchableOpacity style={styles.discardButton} onPress={handleDiscard}>
           <Text style={styles.discardText}>Clean Data</Text>
         </TouchableOpacity>
+        // Button to save changes 
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Text style={styles.saveText}>Save changes</Text>
         </TouchableOpacity>

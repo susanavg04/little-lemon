@@ -14,7 +14,7 @@ import { useHomeViewModel } from '../../ViewModel/Utils';
 import Filters from '../components/Filter';
 
 const sections = ['Appetizers', 'Salads', 'Beverages'];
-
+// Information contained in each menu item 
 const Item = ({ title, price }) => (
   <View style={styles.itemContainer}>
     <Text style={styles.itemTitle}>{title}</Text>
@@ -41,7 +41,6 @@ const images = {
 export default function Home() {
   const navigation = useNavigation();
   const searchBarRef = useRef(null);
-
   const {
     data,
     searchBarText,
@@ -50,7 +49,7 @@ export default function Home() {
     handleFiltersChange,
   } = useHomeViewModel();
   
- 
+  // --- MEMOIZACIÓN DEL HEADER (BANNER + SEARCHBAR + FILTROS) ---
   const ListHeader = useMemo(() => {
    return (
     <View>
@@ -93,7 +92,7 @@ export default function Home() {
     );
     }, [searchBarText, filterSelections]);
     
-
+// --- RENDERING OF EACH DISH AND DETAILED NAVIGATION ---
       return (
        
       <SafeAreaView style={styles.container}>

@@ -10,7 +10,7 @@ export default function Usedishdetailviewmodel(dishId) {
     { name: "Parmesan", price: 1.0, selected: false },
     { name: "Dressing", price: 1.0, selected: false },
   ]);
-
+// Position the plate when assembling the component
   useEffect(() => {
     const fetchDish = async () => {
       const data = await getDishById(dishId);
@@ -19,25 +19,26 @@ export default function Usedishdetailviewmodel(dishId) {
     };
     fetchDish();
   }, [dishId]);
-
+ // Toggle the selection of an option
   const toggleOption = (index) => {
     const newOptions = [...options];
     newOptions[index].selected = !newOptions[index].selected;
     setOptions(newOptions);
   };
-
+  // Increase or decrease the quantity, ensuring it doesn't go below 1
   const increaseQuantity = () => setQuantity(quantity + 1);
   const decreaseQuantity = () => quantity > 1 && setQuantity(quantity - 1);
-
+ // Add the selected dish with options to the cart
   const addToCart = async () => {
+    // Filter the selected options to include only those that are selected
     const selectedOptions = options.filter(o => o.selected);
     if (!dish) {
       alert("No dish loaded");
       return;
     }
-    // Nos aseguramos de que el item tenga id, title, price (como número), quantity y options
+    
     const item = {
-      id: dish.id, // id numérico de la tabla
+      id: dish.id,
       title: dish.title,
       price: parseFloat(dish.price),
       quantity,

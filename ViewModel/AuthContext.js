@@ -7,6 +7,8 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // Load the user from AsyncStorage when the app starts
+
   useEffect(() => {
     
     const loadUser = async () => {
@@ -23,7 +25,7 @@ export const AuthProvider = ({ children }) => {
     };
     loadUser();
   }, []);
-
+ // Function to handle login and logout
   const login = async (userData) => {
        try {
     setUser(userData);

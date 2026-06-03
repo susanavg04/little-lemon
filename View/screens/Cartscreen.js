@@ -5,7 +5,8 @@ import { getCartTotals, removeItemFromCart } from "../../Model/Cartservices";
 
 export default function Cartscreen() {
   const [cartData, setCartData] = useState({ cart: [], subtotal: 0, delivery: 0, service: 0, total: 0 });
-   const loadCart = async () => {
+   // Function to load the shopping basket data
+  const loadCart = async () => {
     try {
     const data = await getCartTotals();
     setCartData(data);
@@ -14,21 +15,24 @@ export default function Cartscreen() {
       console.error("Error loading cart:", error);
     }
   };
+  // Whenever this screen appears, run loadCart()
   useFocusEffect(
    useCallback(() => {
   
     loadCart();
   }, [])
   );
+  // Function to handle the deletion of an item from the cart
   const handleDeleteItem = async (id) => {
     try {
       await removeItemFromCart(id);
-      await loadCart(); // Esto fuerza la actualización inmediata de la UI
+      await loadCart(); 
     } catch (error) {
       console.error("Error deleting item:", error);
     }
   };
   return (
+    // Main container for the cart screen
     <View style={styles.container}>
       <View style={styles.headerSection}>
         <Text style={styles.headerTitle}>ITEMS</Text>
@@ -53,7 +57,7 @@ export default function Cartscreen() {
         </View>
           )}
         />    
-
+        // Summary section displaying the subtotal, delivery fee, service fee, and total amount
       <View style={styles.summaryContainer}>
         <View style={styles.summaryRow}>
           <Text style={styles.summaryLabel}>Subtotal</Text>
@@ -93,10 +97,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   headerSection: {
-    backgroundColor: "#A9B3AC", // El color gris verdoso de la imagen
+    backgroundColor: "#A9B3AC", 
     paddingVertical: 8,
     paddingHorizontal: 15,
-    marginHorizontal: -20, // Para que el fondo gris llegue a los bordes
+    marginHorizontal: -20, 
     marginBottom: 10,
   },
   headerTitle: {
@@ -105,7 +109,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   listContainer: {
-    flex: 1, // Esto empuja el resumen hacia abajo
+    flex: 1, 
   },
   cartItem: {
     flexDirection: "row",

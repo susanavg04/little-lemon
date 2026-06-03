@@ -24,14 +24,14 @@ export default function Onboarding ({ navigation, onFinish })  {
     iniciarseccion 
   } = useOnboardingViewModel(onFinish);
   const { handleDiscard } = useProfileViewModel();
-  
+  // Function for handling logout
   const handleLogout = () => {
   logout();
   setEmail("");
   setPassword("");
   handleDiscard();
 };
-
+  // Function to open the user section or check whether it exists.
   return (
     <View style={styles.container}>
       <View style= {styles.section1}>
@@ -93,6 +93,7 @@ export default function Onboarding ({ navigation, onFinish })  {
           </Text>
          )}
       </View>
+      // Section for the buttons to log in or sign up.
       <View style= {styles.section3}>
        <Button 
       title={user ? "Close Session" : "Sign Up"}
@@ -103,6 +104,8 @@ export default function Onboarding ({ navigation, onFinish })  {
          iniciarseccion();
          }
         }}></Button>
+        
+     // Navigate to the forgot password screen.
       <View style={{ height: 12 }} />
       <Pressable
       onPress={() => navigation.navigate("ForgotPassword")}

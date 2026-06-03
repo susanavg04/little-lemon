@@ -4,22 +4,13 @@ import { obtenerPasswordLocal } from '../../Model/DataBase_AsyncStorage';
 
 const ForgotPasswordScreen = () => {
   const [email, setEmail] = useState('');
- 
-  const handleRecuperar = async () => {
-    
-    const result = await recuperarPasswordPractica(email);
-    
-    Alert.alert(
-      result.success ? "Éxito" : "Error",
-      result.message
-    );
-  };
-  
+
+    // Password recovery function using AsyncStorage.
   const recuperarPasswordPractica = async (email) => {
   if (!email) {
     return { success: false, message: "Por favor, escribe un email." };
-  }
 
+  }
   const passwordEncontrada = await obtenerPasswordLocal(email);
 
   if (passwordEncontrada) {
@@ -34,6 +25,17 @@ const ForgotPasswordScreen = () => {
     };
   }
 };
+// Handler for the "Recuperar Contraseña" button.
+  const handleRecuperar = async () => {
+    
+    const result = await recuperarPasswordPractica(email);
+    
+    Alert.alert(
+      result.success ? "Éxito" : "Error",
+      result.message
+    );
+  };
+
 
 
   return (

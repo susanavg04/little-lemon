@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -7,20 +6,8 @@ import { AuthContext } from '../../ViewModel/AuthContext';
 
 export default function Header() {
   const insets = useSafeAreaInsets();
-  const navigation = useNavigation();
   const { user } = useContext(AuthContext);
-
-  const goToProfile = () => {
-    const rootNavigation = navigation.getParent(); 
-  
-  if (rootNavigation) {
-    rootNavigation.navigate('Profile');
-  } else {
-    
-    navigation.navigate('Profile');
-  }
-  };
-
+ 
   return (
     <View style={[styles.wrapper, { paddingTop: insets.top  }]}>
     <View style={styles.sideContainer} />
@@ -31,6 +18,7 @@ export default function Header() {
         accessible
         accessibilityLabel="Little Lemon"
       />
+      
        <View style={styles.sideContainer}>
         <Pressable onPress={goToProfile} style={styles.avatarButton}>
           {user?.imagenUri ? (

@@ -26,14 +26,12 @@ export const useOnboardingViewModel = (onFinish) => {
   
 
  
-  const navigation = useNavigation();
-    
+  const navigation = useNavigation(); 
   const isEmailValid = validateEmail(email);
   const isPasswordValid = validatePassword(password);
   const loginMutation = useLoginUsuario();
 
-  
-
+ // Function for managing the login process
    const iniciarseccion ={
     
    } = async () => {
@@ -51,7 +49,7 @@ export const useOnboardingViewModel = (onFinish) => {
       Alert.alert("Password does not meet requirements ❌");
       return;
      }
-     
+     // We call the login mutation with the email and password, and handle the response (managed of cache)
      loginMutation.mutate(
       { email, password },
       {

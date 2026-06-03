@@ -7,7 +7,7 @@ import QuantitySelector from "../components/Quantityselector";
 
 
 export default function Dishdetailscreen({ route, navigation }) {
-  const { dishId } = route.params; // viene del menu
+  const { dishId } = route.params; 
   const {
     dish,
     quantity,
@@ -37,11 +37,12 @@ export default function Dishdetailscreen({ route, navigation }) {
 
   if (!dish) return <Text>Cargando...</Text>;
 
-  // Calcular el precio total con adiciones y cantidad
+  // Calculate the total price based on the selected options and quantity
   const selectedOptions = options.filter(opt => opt.selected);
   const additionsTotal = selectedOptions.reduce((sum, opt) => sum + opt.price, 0);
   const totalPrice = (parseFloat(dish.price) + additionsTotal) * quantity;
 
+  // Display the selected dishes.
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <Image source={dishImages[dish.title]} style={styles.image} />
@@ -66,6 +67,7 @@ export default function Dishdetailscreen({ route, navigation }) {
           toggleOption={() => toggleOption(index)}
         />
       ))}
+      // Displays the amount of dishes, the total cost of these, and any additional services
       <View style={styles.centeredRow}>
         <QuantitySelector
           quantity={quantity}

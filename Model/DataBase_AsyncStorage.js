@@ -2,7 +2,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Alert } from "react-native";
 
-  export const guardarUsuario = async (user) => {
+// Data persistence using AsyncStorage, including users and profiles.
+export const guardarUsuario = async (user) => {
     try {
       await AsyncStorage.setItem(`user_${user.email}`, JSON.stringify(user));
       return true;
@@ -13,11 +14,11 @@ import { Alert } from "react-native";
     };
   };
 
-  
+ // Function to add a user via email 
 export const cargarUsuario = async (email) => {
   try {
     const data = await AsyncStorage.getItem(`user_${email}`);
-    if (!data) return null; // si no existe
+    if (!data) return null; 
     const user = JSON.parse(data);
     return user;
   } catch (e) {
@@ -25,7 +26,7 @@ export const cargarUsuario = async (email) => {
     return null;
   }
 };
-
+//The loginUser function is used to validate a user's login using their email address and password.
 export const loginUsuario = async (email, password) => {
   try {
     const user = await cargarUsuario(email);
@@ -44,8 +45,8 @@ export const loginUsuario = async (email, password) => {
     return { success: false, code: "INTERNAL_ERROR", message: "Error interno" };
   }
 };
-
- export const saveProfile = async (email, perfil)=> {
+// The saveProfile function is used to save or update a user's profile information in AsyncStorage based on their email address.
+export const saveProfile = async (email, perfil)=> {
    try {
     if (!email) throw new Error("No se puede guardar perfil sin email");
     
@@ -61,7 +62,8 @@ export const loginUsuario = async (email, password) => {
     Alert.alert('Error', 'Profile could not be saved');
   }  
     };   
-  export const deleteProfile =  async(email) => {
+    // The deleteProfile function is used to delete a user's profile based on their email address.
+export const deleteProfile =  async(email) => {
        
         try {
 
@@ -72,47 +74,47 @@ export const loginUsuario = async (email, password) => {
           Alert.alert('Error', 'Data could not be deleted');
         }
   };
-
-    export const uploadImage = async (uri, email) => {
-       try {
+    // The uploadImage function is used to save a user's profile image URI in AsyncStorage based on their email address.
+export const uploadImage = async (uri, email) => {
+   try {
          
-         if (!email) throw new Error("No se puede guardar imagen sin email");
+    if (!email) throw new Error("No se puede guardar imagen sin email");
          
-         const perfilActual = await cargarUsuario(email);
-         const nuevoPerfil = {
-           ...perfilActual,
+      const perfilActual = await cargarUsuario(email);
+      const nuevoPerfil = {
+        ...perfilActual,
            imagenUri: uri,
-         };
-         await saveProfile(email, nuevoPerfil);
-         
-         console.log('Imagen guardada en AsyncStorage:', uri);
-         return uri;
-       } catch (error) {
-         console.error('Error guardando imagen:', error);
-       }
-
       };
-
-  export const obtenerPasswordLocal = async (email) => {
-  try {
-    const usuario = await cargarUsuario(email);
-    if (usuario && usuario.password) {
-      return usuario.password;
+      await saveProfile(email, nuevoPerfil);
+         
+      console.log('Imagen guardada en AsyncStorage:', uri);
+      return uri;
+      } catch (error) {
+      console.error('Error guardando imagen:', error);
     }
-    return null;
-  } catch (e) {
-    console.error("Error al obtener password", e);
-    return null;
-  }
-};
 
-export const useUsuario = (email) => {
-  return useQuery({
-    queryKey: ['user', email],
-    queryFn: () => cargarUsuario(email),
-    enabled: !!email,
-  });
-};
+    };    
+ // The obtenerPasswordLocal function is used to retrieve a user's password from AsyncStorage based on their email address.
+ export const obtenerPasswordLocal = async (email) => {
+  try {
+      const usuario = await cargarUsuario(email);
+      if (usuario && usuario.password) {
+        return usuario.password;
+      }
+        return null;
+        } catch (e) {
+        console.error("Error al obtener password", e);
+       return null;
+       }
+     };    
+// Custom hooks for React Query to manage user data and profiles.
+ export const useUsuario = (email) => {
+   return useQuery({
+        queryKey: ['user', email],
+        queryFn: () => cargarUsuario(email),
+        enabled: !!email,
+       });
+    };    
 
 export const useLoginUsuario = () => {
   return useMutation({

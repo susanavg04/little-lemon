@@ -1,6 +1,6 @@
 
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
+// Component for selecting the quantity of a product
 export default function QuantitySelector({ quantity, onIncrease, onDecrease }) {
   return (
     <View style={styles.container}>

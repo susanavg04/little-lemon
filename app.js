@@ -20,6 +20,8 @@ const Tab = createBottomTabNavigator();
 const HomeStack = createNativeStackNavigator();
 const LoginStack = createNativeStackNavigator();
 
+//Navigate from the Login screen to screen of recover password.
+
 function LoginStackNavigator() {
   return (
     <LoginStack.Navigator>
@@ -36,7 +38,7 @@ function LoginStackNavigator() {
     </LoginStack.Navigator>
   );
 }
-
+//Navigate from the main screen (Home) to the details of the dish screen.
 function HomeStackNavigator() {
   return (
     <HomeStack.Navigator>
@@ -53,6 +55,7 @@ function HomeStackNavigator() {
     </HomeStack.Navigator>
   );
 }
+// Main app menu (Located at the bottom of the screen)
 
  function MainTabs() {
     return (
@@ -101,7 +104,6 @@ export default function App() {
           <Stack.Navigator 
             screenOptions={{ headerShown: false }}>
             <Stack.Screen name="MainTabs" component={MainTabs} />
-
           </Stack.Navigator>
         </NavigationContainer>
       </QueryClientProvider>

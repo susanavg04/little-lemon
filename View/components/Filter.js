@@ -1,6 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const Filters = ({ onChange, selections, sections }) => {
+  //This code uses `map()` to iterate through an array called `sections` and create a `TouchableOpacity` component for each element.
   return (
     <View style={styles.filtersContainer}>
       {sections.map((section, index) => (

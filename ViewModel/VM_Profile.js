@@ -19,7 +19,6 @@ export const useProfileViewModel = () => {
   return regex.test(password);
   };
   const [email, setEmail] = useState(user?.email || "");
-
   const [firstname, setfirstname] = useState("");
   const [lastName, setLastName] = useState("");
   const [password, setPassword] = useState("");
@@ -35,49 +34,34 @@ export const useProfileViewModel = () => {
    const { data: userData, isLoading } = useUsuario(email);
    const saveProfileMutation = useSaveProfile();
    const uploadImageMutation = useUploadImage();
-   const handleLogout = () => {
-   authLogout();
-   };
+   const handleLogout = () => { authLogout();};
    const isEmailValid = validateEmail(email);
    const isPasswordValid = validatePassword(password);
    const [errors, setErrors] = useState({});
- 
-
-  const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
-
-  const validateForm = () => {
- 
+   const iniciales = `${firstname?.[0] || ""}${lastName?.[0] || ""}`;
+   const validateForm = () => {
     let newErrors = {};
-
-  if (!firstname) newErrors.firstname = "Firstname is required";
-  if (!lastName) newErrors.lastName = "Last name is required";
-  if (!email) newErrors.email = "Email is required";
-  else if (!isEmailValid) newErrors.email = "Invalid email";
-
-  if (!phone) newErrors.phone = "Phone is required";
-
-  if (!password) newErrors.password = "Password is required";
-  else if (!isPasswordValid)
+   if (!firstname) newErrors.firstname = "Firstname is required";
+   if (!lastName) newErrors.lastName = "Last name is required";
+   if (!email) newErrors.email = "Email is required";
+   else if (!isEmailValid) newErrors.email = "Invalid email";
+   if (!phone) newErrors.phone = "Phone is required";
+   if (!password) newErrors.password = "Password is required";
+   else if (!isPasswordValid)
     newErrors.password =
       "Min 8 chars, 1 uppercase, 1 lowercase, 1 number, 1 special char";
+   if (!imagenUri) newErrors.imagen = "Profile image is required";
+     setErrors(newErrors);
 
-  if (!imagenUri) newErrors.imagen = "Profile image is required";
-
-  setErrors(newErrors);
-
-  return Object.keys(newErrors).length === 0;
-};
- 
+   return Object.keys(newErrors).length === 0;
+  };
 
   const registrar = async () => {
       const isValid = validateForm();
-
      if (!isValid) {
     return false; 
      }
-  
      try {
-      
       const success = await guardarUsuario({ firstname, email, password, lastName, phone, imagenUri, notifications });
      
       if (success) {
@@ -97,7 +81,8 @@ export const useProfileViewModel = () => {
       }
     };
 
-    useEffect(() => {
+// When user information is received, load the profile
+  useEffect(() => {
   if (userData) {
     setfirstname(userData.firstname || "");
     setLastName(userData.lastName || "");
@@ -117,7 +102,7 @@ export const useProfileViewModel = () => {
   const handleToggle = (key) => {
     setNotifications({ ...notifications, [key]: !notifications[key] });
   };
-
+// When user create the profile and click save, update the profile in AsyncStorage and cache
   const handleSave = async () => {
     
     const perfil = {
@@ -142,9 +127,9 @@ export const useProfileViewModel = () => {
   );  
   };
 
-
+// When user create the profile and click discard, reset all fields to initial values
   const handleDiscard = async () => {
-      setfirstname("");
+    setfirstname("");
     setLastName("");
     setPassword("");
     setEmail("");
@@ -157,15 +142,14 @@ export const useProfileViewModel = () => {
       newsletter: true,
     } )
   };
+
   const seleccionarImagen = async () => {
     
     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
       alert("Se requieren permisos para acceder a las imágenes.");
-
       return;
     }
-
     try {
     const resultado = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ['images'],
@@ -182,7 +166,6 @@ export const useProfileViewModel = () => {
       ...prev,
       imagenUri: uriSeleccionada,
      }));
-    
       
      uploadImageMutation.mutate(
      { uri: uriSeleccionada, email },
