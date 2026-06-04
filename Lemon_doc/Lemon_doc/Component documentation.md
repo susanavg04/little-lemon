@@ -4,7 +4,17 @@ This document describes the architecture, screens, reusable components, ViewMode
 
 1. **Project Structure**
 
+<<<<<<< HEAD
+## 
+
+```text
+little-lemon/
+├── assets/
+│   ├── Fonts/
+│   └── Images/
+=======
 FIRTAPPLEMON/
+>>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 │
 ├── Model/
 │   ├── Cartservices.js
@@ -13,6 +23,9 @@ FIRTAPPLEMON/
 │
 ├── View/
 │   ├── components/
+<<<<<<< HEAD
+│   └── screens/
+=======
 │   │   ├── Button.js
 │   │   ├── Filter.js
 │   │   ├── Header.js
@@ -26,6 +39,7 @@ FIRTAPPLEMON/
 │       ├── Home.js
 │       ├── Onboarding.js
 │       └── Profile.js
+>>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 │
 ├── ViewModel/
 │   ├── AuthContext.js
@@ -34,7 +48,15 @@ FIRTAPPLEMON/
 │   ├── Utils.js
 │   └── Vm_profile.js
 │
+<<<<<<< HEAD
+├── App.js
+├── app.json
+├── package.json
+└── README.md
+```
+=======
 └── App.js
+>>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 
 2. **Navigation Architecture**
 
