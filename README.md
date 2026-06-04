@@ -48,12 +48,13 @@ The main objectives of this project are:
 6.JavaScript (ES6+):	Programming language
 7.Expo Vector Icons:	Icons library
 
-**Application Structure**
+## Application Structure
 
+```text
 little-lemon/
 ├── Assets/
-│   ├── Fonts
-│   └── Images
+│   ├── Fonts/
+│   └── Images/
 │
 ├── Model/
 │   ├── Cartservices.js
@@ -61,7 +62,6 @@ little-lemon/
 │   └── DataBase_SQLite.js
 │
 ├── View/
-│   │
 │   ├── components/
 │   │   ├── Button.js
 │   │   ├── Filter.js
@@ -69,27 +69,28 @@ little-lemon/
 │   │   ├── Optionselector.js
 │   │   └── Quantityselector.js
 │   │
-│   ├── screens/
-│   │   ├── Home.js
-│   │   ├── Cartscreen.js
-│   │   ├── Dishdetailscreen.js
-│   │   ├── ForgotPasswordScreen.js
-│   │   ├── Onboarding.js
-│   │   └── Profile.js
-│   │
-│   └── ViewModel/
-│       ├── AuthContext.js
-│       ├── Onboardingviewmodel.js
-│       ├── Usedishdetails.js
-│       ├── Utils.js
-│       └── Vm_profile.js
+│   └── screens/
+│       ├── Home.js
+│       ├── Cartscreen.js
+│       ├── Dishdetailscreen.js
+│       ├── ForgotPasswordScreen.js
+│       ├── Onboarding.js
+│       └── Profile.js
+│
+├── ViewModel/
+│   ├── AuthContext.js
+│   ├── Onboardingviewmodel.js
+│   ├── Usedishdetails.js
+│   ├── Utils.js
+│   └── Vm_profile.js
 │
 ├── App.js
 ├── app.json
 ├── eas.json
-├── package-lock-json
+├── package-lock.json
 ├── package.json
 └── README.md
+```
 
 **Architecture Overview**
 
