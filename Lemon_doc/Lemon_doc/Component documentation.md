@@ -3,8 +3,13 @@
 This document describes the architecture, screens, reusable components, ViewModels, services, and navigation structure of the Little Lemon React Native application. It is based on the current Visual Studio Code project structure shown in the application screenshot.
 
 1. **Project Structure**
+## Application Structure
 
-FIRTAPPLEMON/
+```text
+little-lemon/
+├── Assets/
+│   ├── Fonts/
+│   └── Images/
 │
 ├── Model/
 │   ├── Cartservices.js
@@ -20,10 +25,10 @@ FIRTAPPLEMON/
 │   │   └── Quantityselector.js
 │   │
 │   └── screens/
+│       ├── Home.js
 │       ├── Cartscreen.js
 │       ├── Dishdetailscreen.js
 │       ├── ForgotPasswordScreen.js
-│       ├── Home.js
 │       ├── Onboarding.js
 │       └── Profile.js
 │
@@ -34,7 +39,13 @@ FIRTAPPLEMON/
 │   ├── Utils.js
 │   └── Vm_profile.js
 │
-└── App.js
+├── App.js
+├── app.json
+├── eas.json
+├── package-lock.json
+├── package.json
+└── README.md
+```
 
 2. **Navigation Architecture**
 
