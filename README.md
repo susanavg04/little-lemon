@@ -103,9 +103,9 @@ The project follows a structure inspired by the MVVM pattern:
 **ScreenShot**
 
 <p align="center">
-  <img src="./assets/images/Proceso de Perfil.Png" width="250" alt="Proceso de Perfil" />
-  <img src="./assets/images/Proceso de Log in.Png" width="250" alt="Proceso de Log in" />
-  <img src="./assets/images/Proceso de compra.Png" width="250" alt="Proceso de Compra" />
+  <img src="./assets/images/Proceso de Perfil.png" width="250" alt="Proceso de Perfil" />
+  <img src="./assets/images/Proceso de Log in.png" width="250" alt="Proceso de Log in" />
+  <img src="./assets/images/Proceso de compra.png" width="250" alt="Proceso de Compra" />
 </p>
 
 **User Interface Design**
