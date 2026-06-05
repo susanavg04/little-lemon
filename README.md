@@ -48,19 +48,11 @@ The main objectives of this project are:
 6.JavaScript (ES6+):	Programming language
 7.Expo Vector Icons:	Icons library
 
-<<<<<<< HEAD
 ## Project Structure
 
 ```text
 little-lemon/
-├── assets/
-=======
-## Application Structure
-
-```text
-little-lemon/
 ├── Assets/
->>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 │   ├── Fonts/
 │   └── Images/
 │
@@ -71,9 +63,6 @@ little-lemon/
 │
 ├── View/
 │   ├── components/
-<<<<<<< HEAD
-│   └── screens/
-=======
 │   │   ├── Button.js
 │   │   ├── Filter.js
 │   │   ├── Header.js
@@ -87,7 +76,6 @@ little-lemon/
 │       ├── ForgotPasswordScreen.js
 │       ├── Onboarding.js
 │       └── Profile.js
->>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 │
 ├── ViewModel/
 │   ├── AuthContext.js
@@ -98,17 +86,13 @@ little-lemon/
 │
 ├── App.js
 ├── app.json
-<<<<<<< HEAD
-=======
 ├── eas.json
 ├── package-lock.json
->>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 ├── package.json
 └── README.md
 ```
 **Architecture Overview**
 
-<<<<<<< HEAD
 The project follows a structure inspired by the MVVM pattern:
 | Layer     | Responsibility                         |
 | --------- | -------------------------------------- |
@@ -130,7 +114,7 @@ Design Overview
 
 The Little Lemon Restaurant application follows a clean, modern, and user-friendly interface designed to provide a smooth food ordering experience. The visual design is based on the official Little Lemon branding, using a consistent color palette, intuitive navigation, and responsive layouts.
 
-=======
+
 **Architecture Overview**
 
 The project follows a structure inspired by the MVVM pattern:
@@ -140,21 +124,12 @@ The project follows a structure inspired by the MVVM pattern:
 | View      | UI components and application screens  |
 | ViewModel | Business logic and state handling      |
 
-**ScreenShot**
-
-<p align="center">
-  <img src="./assets/images/Proceso de Perfil.Png" width="250" alt="Proceso de Perfil" />
-  <img src="./assets/images/Proceso de Log in.Png" width="250" alt="Proceso de Log in" />
-  <img src="./assets/images/Proceso de compra.Png" width="250" alt="Proceso de Compra" />
-</p>
 
 **User Interface Design**
 
 Design Overview
 
 The Little Lemon Restaurant application follows a clean, modern, and user-friendly interface designed to provide a smooth food ordering experience. The visual design is based on the official Little Lemon branding, using a consistent color palette, intuitive navigation, and responsive layouts.
-
->>>>>>> 158b2689ca76f9f4955c41c5747f5c2cf0daf176
 The application was developed using React Native and follows a mobile-first design approach.
 
 Design Principles
